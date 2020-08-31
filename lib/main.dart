@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:resident_zombies/pages/login_page.dart';
+import 'locale/app_localizations.dart';
+import 'model/routes.dart';
+import 'pages/not_found.dart';
 
-// Starting point
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
@@ -17,6 +21,19 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
+  /// Initial route name
+  /// All Classes on pages folder want to be an string routeName
+  /// If u need a logic to define a start route
+  /// Ex: If user is previusly loggd show page A else render PageB
+  /// Use inistate to define that
+  String _initialRoute;
+
+  @override
+  void initState() {
+    super.initState();
+    _initialRoute = LoginPage.routeName;
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -30,7 +47,7 @@ class _AppState extends State<App> {
             color: Colors.white,
           ),
         ),
-        title: 'Primeira Mesa',
+        title: AppLocalizations.of(context).appName,
         initialRoute: _initialRoute,
         onGenerateRoute: useGenerateRoute,
         localizationsDelegates: [
@@ -45,10 +62,24 @@ class _AppState extends State<App> {
       ),
     );
   }
+
+  Route<dynamic> useGenerateRoute(RouteSettings settings) {
+    if (appRoutes.containsKey(settings.name)) {
+      final builder = appRoutes[settings.name];
+
+      if (appRoutes.containsKey(settings.name)) {
+        final builder = appRoutes[settings.name];
+
+        return inPageRoute(builder(context),
+            RouteSettings(name: settings.name, arguments: settings.arguments));
+      }
+    }
+    return inPageRoute(NotFoundPage());
+  }
 }
 
 Provider<T> inProvider<T>(T value) =>
-    Provider<T>.value(value: value, updateShouldNotify: neverNotify);
+    Provider<T>.value(value: value, updateShouldNotify: (_, __) => false);
 
 MaterialPageRoute inPageRoute(Widget child, [RouteSettings settings]) =>
     MaterialPageRoute(builder: (context) => child, settings: settings);
