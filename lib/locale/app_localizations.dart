@@ -11,6 +11,8 @@ class AppLocalizations {
   }
 
   String get appName => 'The resident zombies';
+  String get back => 'Voltar';
+  String get notFound => 'Não encontrada';
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
