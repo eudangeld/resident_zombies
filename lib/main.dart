@@ -47,7 +47,7 @@ class _AppState extends State<App> {
             color: Colors.white,
           ),
         ),
-        title: AppLocalizations.of(context).appName,
+        title: 'The resident zombies',
         initialRoute: _initialRoute,
         onGenerateRoute: useGenerateRoute,
         localizationsDelegates: [
