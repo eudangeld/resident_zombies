@@ -93,6 +93,18 @@ class Api {
     return _rresult.data;
   }
 
+  ///Fetches all survivors Itens
+  ///
+  ///[GET]
+  ///Use [person_id] to retrieve all itens information from
+  Future<dynamic> getSurvivorItems(String person_id) async {
+    final dio = Dio();
+    final _result = await dio.get(
+        'http://zssn-backend-example.herokuapp.com/api/people/$person_id/properties');
+
+    return _result.data;
+  }
+
   ///
   ///[POST]
   ///Required [String name] Required [int Age] Required [String gender]
@@ -128,9 +140,10 @@ class Api {
   /// [GET]
   /// String [id] Person UUID
   /// Fetch a single survivor
-  Future<dynamic> getSurvivor(String location) async {
+  Future<dynamic> getSurvivor(String id) async {
     final dio = Dio();
-    final _result = await dio.get(location);
+    final _result = await dio
+        .get("http://zssn-backend-example.herokuapp.com/api/people/$id");
     print(_result.data);
     return _result.data;
   }
