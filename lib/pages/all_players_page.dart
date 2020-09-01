@@ -25,7 +25,7 @@ class _AllPLayersPageState extends State<AllPLayersPage> {
                 itemCount: _data.length,
                 itemBuilder: (context, index) => ListTile(
                   title: Text(_data[index]['name']),
-                  isThreeLine: true,
+                  trailing: Text(_data[index]['gender'] ?? ''),
                   leading: Container(
                       padding: EdgeInsets.all(10),
                       child: Image.asset('assets/zombie_002.png')),
