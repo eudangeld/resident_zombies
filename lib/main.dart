@@ -36,6 +36,7 @@ class _AppState extends State<App> {
   @override
   void initState() {
     super.initState();
+    _api = Api();
     _initialRoute = RegisterPage.routeName;
   }
 
