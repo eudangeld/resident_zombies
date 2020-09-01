@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:resident_zombies/model/app_state.dart';
+import 'package:resident_zombies/pages/main_game_page.dart';
 import 'package:resident_zombies/pages/register_page.dart';
 import 'api/api.dart';
 import 'locale/app_localizations.dart';
@@ -33,11 +35,16 @@ class _AppState extends State<App> {
   /// and passed above the tree
   Api _api;
 
+  /// Stores stream and data for app
+  AppState _state;
+
   @override
   void initState() {
     super.initState();
     _api = Api();
-    _initialRoute = RegisterPage.routeName;
+    _state = AppState();
+    // _initialRoute = RegisterPage.routeName;
+    _initialRoute = MaingamePage.routeName;
   }
 
   @override
@@ -45,6 +52,7 @@ class _AppState extends State<App> {
     return MultiProvider(
       providers: [
         inProvider<Api>(_api),
+        inProvider<AppState>(_state),
       ],
       child: MaterialApp(
         theme: ThemeData(
