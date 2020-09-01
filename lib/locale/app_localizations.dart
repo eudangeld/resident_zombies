@@ -22,6 +22,7 @@ class AppLocalizations {
   String get nameFormHint => 'Nome';
   String get ageFormHint => 'Idade';
   String get loginPageBarTitle => 'Seja bem vindo';
+  String get register => 'Cadastrar';
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
