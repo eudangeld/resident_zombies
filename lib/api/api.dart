@@ -4,10 +4,38 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class Api {
+  Dio _dio;
+  Api() {
+    _dio = Dio(BaseOptions(
+        baseUrl: baseUrl, contentType: Headers.formUrlEncodedContentType));
+    _dio.options.contentType = Headers.formUrlEncodedContentType;
+    _dio.interceptors
+        .add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
+      print('ON REQUEST');
+      print(options.uri);
+      print(options.data);
+      print(options.headers);
+      return options;
+    }, onResponse: (Response response) async {
+      print('ON RESPONSE');
+      print(response.data);
+      print(response.statusMessage);
+      print(response.statusCode);
+      print(response.extra);
+      return response;
+    }, onError: (DioError e) async {
+      print('ON ERROR');
+
+      print(e.error);
+      print(e.request);
+      print(e.error);
+      return e;
+    }));
+  }
+
   /// TODO: come from a .env file
   /// Use if u need to acces outside of this class
   static final String baseUrl = 'http://zssn-backend-example.herokuapp.com';
-  final _dio = Dio();
 
   /// Trade an item
   ///
@@ -60,7 +88,7 @@ class Api {
   ///[POST]
   ///Required [String name] Required [int Age] Required [String gender]
   ///Inventory Items required [items String ] in the format 'Fiji Water:10;Campbell Soup:5'
-  Future<void> register({
+  Future<dynamic> register({
     @required String name,
     @required int age,
     @required String gender,
@@ -68,7 +96,7 @@ class Api {
   }) async {
     //TODO:TREAT REPONSE ERERORS
     Map<dynamic, dynamic> body = {
-      'items': 'Fiji Water:10',
+      'items': 'Fiji Water:10;Campbell Soup:5;First Aid Pouch:5; AK47:10',
       'person': {
         'name': name,
         'age': age,
@@ -76,13 +104,16 @@ class Api {
       }
     };
 
-    _dio.options.contentType = Headers.formUrlEncodedContentType;
-    final _result = await _dio.post(
-        "http://zssn-backend-example.herokuapp.com/api/people",
-        data: body,
-        options: Options(contentType: Headers.formUrlEncodedContentType));
-
-    print(_result.data);
+    try {
+      final _result = await _dio.post(
+          "http://zssn-backend-example.herokuapp.com/api/people",
+          data: body,
+          options: Options(contentType: Headers.formUrlEncodedContentType));
+      return _result.data;
+    } catch (e) {
+      //TODO :FIND NEW ROADS
+      return null;
+    }
   }
 
   /// [GET]

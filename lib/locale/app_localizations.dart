@@ -15,8 +15,8 @@ class AppLocalizations {
   String get notFound => 'Não encontrada';
 
   /// REGISTER PAGE LOCALESSSS
-  String get loginPageBodyTitle =>
-      'Pelo visto você ainda não é um sobrevivente, faça seu cadastro e veja se realmente é um sobrevivente.';
+  String get registerPageBodyTitle =>
+      'Pelo visto você ainda não é um sobrevivente, faça seu cadastro e veja se realmente se garante.';
 
   String get nameFormHint => 'Nome';
   String get nameFormError => 'Nome é obrigatório';
@@ -24,7 +24,7 @@ class AppLocalizations {
   String get ageFormHint => 'Idade';
   String get ageFormError => 'Idade obrigatória';
 
-  String get loginPageBarTitle => 'Seja bem vindo';
+  String get registerPageBarTitle => 'Seja bem vindo';
   String get register => 'Cadastrar';
 
   ///

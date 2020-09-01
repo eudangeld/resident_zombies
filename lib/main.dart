@@ -50,10 +50,9 @@ class _AppState extends State<App> {
         theme: ThemeData(
           scaffoldBackgroundColor: Colors.white,
           appBarTheme: AppBarTheme(
-            brightness: Brightness.light,
-            elevation: 0,
-            color: Colors.white,
-          ),
+              brightness: Brightness.light,
+              elevation: 0,
+              color: Colors.lightGreenAccent),
         ),
         title: 'The resident zombies',
         initialRoute: _initialRoute,
