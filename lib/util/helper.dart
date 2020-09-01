@@ -1,7 +1,10 @@
 import 'package:flutter/widgets.dart';
-
+import 'package:provider/provider.dart';
+import '../api/api.dart';
 import '../locale/app_localizations.dart';
 
-/// A shortcut to avoid verbosity
-/// When need to acesses lz
+/// Localizations shortcut
 AppLocalizations lz(BuildContext context) => AppLocalizations.of(context);
+
+/// Api shortcut
+Api api(BuildContext context) => Provider.of<Api>(context, listen: false);
