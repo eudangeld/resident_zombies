@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:resident_zombies/pages/main_game_page.dart';
 import 'package:resident_zombies/util/helper.dart';
 import 'package:resident_zombies/widgets/bottom_sheet_button.dart';
 import 'package:resident_zombies/widgets/loading_widget.dart';
@@ -50,7 +51,10 @@ class _RegisterPageState extends State<RegisterPage> {
         gender: 'F',
         items: '',
       );
-      print(_registerResult ?? 'Já existe um usuå´rios com esse nome');
+      if (_registerResult != null) {
+        await Navigator.of(context)
+            .pushReplacementNamed(MaingamePage.routeName);
+      }
       setState(() {
         _loading = false;
       });
@@ -68,41 +72,48 @@ class _RegisterPageState extends State<RegisterPage> {
         key: _loginFormKey,
         child: _loading
             ? Loading()
-            : Container(
-                child: Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Text(lz(context).registerPageBodyTitle,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.black, fontSize: 22)),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Container(
-                        child: Column(
-                          children: <Widget>[
-                            _field(
-                              controller: _nameController,
-                              validator: (String value) => value.isEmpty
-                                  ? lz(context).nameFormError
-                                  : null,
-                              hint: lz(context).nameFormHint,
-                            ),
-                            SizedBox(height: 30),
-                            _field(
-                              inputType: TextInputType.number,
-                              controller: _ageController,
-                              validator: (String value) => value.isEmpty
-                                  ? lz(context).ageFormError
-                                  : null,
-                              hint: lz(context).ageFormHint,
-                            ),
-                          ],
-                        ),
+            : SingleChildScrollView(
+                child: Container(
+                  child: Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.all(30),
+                        child: Image.asset('assets/zombie_002.png'),
                       ),
-                    )
-                  ],
+                      Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Text(lz(context).registerPageBodyTitle,
+                            textAlign: TextAlign.center,
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 22)),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Container(
+                          child: Column(
+                            children: <Widget>[
+                              _field(
+                                controller: _nameController,
+                                validator: (String value) => value.isEmpty
+                                    ? lz(context).nameFormError
+                                    : null,
+                                hint: lz(context).nameFormHint,
+                              ),
+                              SizedBox(height: 30),
+                              _field(
+                                inputType: TextInputType.number,
+                                controller: _ageController,
+                                validator: (String value) => value.isEmpty
+                                    ? lz(context).ageFormError
+                                    : null,
+                                hint: lz(context).ageFormHint,
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
       ),
