@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:resident_zombies/pages/main_game_page.dart';
 import 'package:resident_zombies/pages/register_page.dart';
 
 // Keep here routes that users need to be logged to aceess
@@ -9,4 +10,5 @@ List<String> get useLoggedRoutes => [];
 /// this obj are used on main class
 Map<String, WidgetBuilder> get appRoutes => {
       RegisterPage.routeName: (_) => RegisterPage(),
+      MaingamePage.routeName: (_) => MaingamePage(),
     };
