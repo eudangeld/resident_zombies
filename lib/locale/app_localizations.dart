@@ -14,8 +14,14 @@ class AppLocalizations {
   String get back => 'Voltar';
   String get notFound => 'Não encontrada';
 
-  ///titles used on appbar's
-  String get loginPageTitle => 'Seja bem vindo';
+  /// Loginpage texts
+  /// Store here login page strings
+  String get loginPageBodyTitle =>
+      'Pelo visto você ainda não é um sobrevivente, faça seu cadastro e veja se realmente é um sobrevivente.';
+
+  String get nameFormHint => 'Nome';
+  String get ageFormHint => 'Idade';
+  String get loginPageBarTitle => 'Seja bem vindo';
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
