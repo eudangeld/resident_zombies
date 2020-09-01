@@ -6,15 +6,21 @@ import 'package:flutter/material.dart';
 class Api {
   Dio _dio;
   Api() {
-    _dio = Dio(BaseOptions(
-        baseUrl: baseUrl, contentType: Headers.formUrlEncodedContentType));
-    _dio.options.contentType = Headers.formUrlEncodedContentType;
+    _dio = Dio(
+      BaseOptions(
+        baseUrl: baseUrl,
+        // contentType: Headers.formUrlEncodedContentType,
+      ),
+    );
+    // _dio.options.contentType = Headers.formUrlEncodedContentType;
     _dio.interceptors
         .add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
       print('ON REQUEST');
       print(options.uri);
       print(options.data);
       print(options.headers);
+      print(options.extra);
+      print(options.method);
       return options;
     }, onResponse: (Response response) async {
       print('ON RESPONSE');
@@ -28,7 +34,7 @@ class Api {
 
       print(e.error);
       print(e.request);
-      print(e.error);
+      print(e.message);
       return e;
     }));
   }
@@ -79,10 +85,13 @@ class Api {
   ///[GET]
   ///Fetches all survivors
   ///Implementation Notes
-  Future<void> getAll() {}
+  Future<dynamic> getAll() async {
+    final dio = Dio();
+    final _rresult =
+        await dio.get('http://zssn-backend-example.herokuapp.com/api/people');
 
-  ///Register a new survivor
-  ///curl -X POST --header 'Content-Type: application/x-www-form-urlencoded' --header 'Accept: application/json' -d 'person%5Bname%5D=dsadd&person%5Bage%5D=10.0&person%5Bgender%5D=m&items=dsadd%3Bdas' 'http://zssn-backend-example.herokuapp.com//zssn-backend-example.herokuapp.com/api/people.json'
+    return _rresult.data;
+  }
 
   ///
   ///[POST]
