@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:resident_zombies/pages/login_page.dart';
+import 'api/api.dart';
 import 'locale/app_localizations.dart';
 import 'model/routes.dart';
 import 'pages/not_found.dart';
@@ -28,6 +29,10 @@ class _AppState extends State<App> {
   /// Use inistate to define that
   String _initialRoute;
 
+  /// used on provider
+  /// and passed above the tree
+  Api _api;
+
   @override
   void initState() {
     super.initState();
@@ -37,7 +42,9 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [],
+      providers: [
+        inProvider<Api>(_api),
+      ],
       child: MaterialApp(
         theme: ThemeData(
           scaffoldBackgroundColor: Colors.white,
