@@ -9,7 +9,7 @@ class Api {
     _dio = Dio(
       BaseOptions(
         baseUrl: baseUrl,
-        // contentType: Headers.formUrlEncodedContentType,
+        contentType: Headers.formUrlEncodedContentType,
       ),
     );
     // _dio.options.contentType = Headers.formUrlEncodedContentType;

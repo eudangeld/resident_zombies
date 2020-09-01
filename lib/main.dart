@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:resident_zombies/model/app_state.dart';
+import 'package:resident_zombies/pages/all_players_page.dart';
 import 'package:resident_zombies/pages/main_game_page.dart';
 import 'package:resident_zombies/pages/register_page.dart';
 import 'api/api.dart';
@@ -44,7 +45,8 @@ class _AppState extends State<App> {
     _api = Api();
     _state = AppState();
     // _initialRoute = RegisterPage.routeName;
-    _initialRoute = MaingamePage.routeName;
+    // _initialRoute = MaingamePage.routeName;
+    _initialRoute = AllPLayersPage.routeName;
   }
 
   @override
