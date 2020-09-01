@@ -12,6 +12,9 @@ AppLocalizations lz(BuildContext context) => AppLocalizations.of(context);
 /// Api shortcut
 Api api(BuildContext context) => Provider.of<Api>(context, listen: false);
 
+String getIdFromLocation(String location) =>
+    location.substring(location.lastIndexOf('/') + 1);
+
 /// State shortcut
 AppState state(BuildContext context) =>
     Provider.of<AppState>(context, listen: false);
