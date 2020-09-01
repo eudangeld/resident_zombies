@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:resident_zombies/pages/survivor_items_page.dart';
 import 'package:resident_zombies/widgets/loading_widget.dart';
 import '../util/helper.dart';
 import '../widgets/game_drawer.dart';
@@ -28,7 +29,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
     return Scaffold(
       appBar: AppBar(),
       body: FutureBuilder(
-          future: api(context).getSurvivor(routeArgs['location']),
+          future: api(context).getSurvivor(routeArgs),
           builder: (BuildContext context, snapshot) {
             if (snapshot.hasData) {
               dynamic _profileData = snapshot.data;
@@ -39,6 +40,14 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                           EdgeInsets.symmetric(vertical: 15, horizontal: 50),
                       child: Image.asset('assets/zombie_002.png')),
                   SizedBox(height: _defaultItensGap),
+                  Row(children: <Widget>[
+                    InkWell(
+                      child: Text('VER ITENS'),
+                      onTap: () => Navigator.of(context).popAndPushNamed(
+                          SurvivorItemsPage.routeName,
+                          arguments: routeArgs),
+                    )
+                  ]),
                   Container(
                     width: MediaQuery.of(context).size.width * .8,
                     child: Column(

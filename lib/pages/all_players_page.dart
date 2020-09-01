@@ -27,7 +27,7 @@ class _AllPLayersPageState extends State<AllPLayersPage> {
                 itemBuilder: (context, index) => ListTile(
                   onTap: () async => await Navigator.of(context).pushNamed(
                       PlayerProfilePage.routeName,
-                      arguments: _data[index]),
+                      arguments: getIdFromLocation(_data[index]['location'])),
                   title: Text(_data[index]['name']),
                   trailing: Text(_data[index]['gender'] ?? ''),
                   leading: Container(

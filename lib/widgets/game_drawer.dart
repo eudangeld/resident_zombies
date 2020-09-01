@@ -12,6 +12,7 @@ class GameDrawer extends StatelessWidget {
 
 final List<DrawerItem> drawerItems = [
   DrawerItem(label: 'Perfil'),
+  DrawerItem(label: 'Mapa'),
   DrawerItem(label: 'Meus ítens'),
   DrawerItem(label: 'Amigos'),
   DrawerItem(label: 'Todos jogadores'),
