@@ -13,6 +13,9 @@ class AppLocalizations {
   String get appName => 'The resident zombies';
   String get back => 'Voltar';
   String get notFound => 'Não encontrada';
+
+  ///titles used on appbar's
+  String get loginPageTitle => 'Seja bem vindo';
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
