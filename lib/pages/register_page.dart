@@ -33,7 +33,6 @@ class _RegisterPageState extends State<RegisterPage> {
           validator: validator,
           decoration: InputDecoration(
             labelText: hint.toUpperCase(),
-            contentPadding: EdgeInsets.zero,
             border: InputBorder.none,
           ),
           textAlign: TextAlign.start);
