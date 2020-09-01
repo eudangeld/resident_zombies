@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:resident_zombies/model/user.dart';
+import 'package:resident_zombies/pages/profile_page.dart';
 import 'package:resident_zombies/util/helper.dart';
 import 'package:resident_zombies/widgets/game_drawer.dart';
 import 'package:resident_zombies/widgets/loading_widget.dart';
@@ -24,6 +25,9 @@ class _AllPLayersPageState extends State<AllPLayersPage> {
               return ListView.builder(
                 itemCount: _data.length,
                 itemBuilder: (context, index) => ListTile(
+                  onTap: () async => await Navigator.of(context).pushNamed(
+                      PlayerProfilePage.routeName,
+                      arguments: _data[index]),
                   title: Text(_data[index]['name']),
                   trailing: Text(_data[index]['gender'] ?? ''),
                   leading: Container(
@@ -31,10 +35,8 @@ class _AllPLayersPageState extends State<AllPLayersPage> {
                       child: Image.asset('assets/zombie_002.png')),
                 ),
               );
-            } else {
-              print('DONT HAVE');
-              return Loading();
             }
+            return Loading();
           }),
     );
   }

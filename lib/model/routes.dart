@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:resident_zombies/pages/profile_page.dart';
 import '../pages/all_players_page.dart';
 import '../pages/main_game_page.dart';
 import '../pages/register_page.dart';
@@ -13,4 +14,5 @@ Map<String, WidgetBuilder> get appRoutes => {
       RegisterPage.routeName: (_) => RegisterPage(),
       MaingamePage.routeName: (_) => MaingamePage(),
       AllPLayersPage.routeName: (_) => AllPLayersPage(),
+      PlayerProfilePage.routeName: (_) => PlayerProfilePage(),
     };

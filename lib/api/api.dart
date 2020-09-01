@@ -128,7 +128,12 @@ class Api {
   /// [GET]
   /// String [id] Person UUID
   /// Fetch a single survivor
-  Future<void> getSurvivor() {}
+  Future<dynamic> getSurvivor(String location) async {
+    final dio = Dio();
+    final _result = await dio.get(location);
+    print(_result.data);
+    return _result.data;
+  }
 
   ///[PATH]
   ///Update survivor
