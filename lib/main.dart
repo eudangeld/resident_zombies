@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:resident_zombies/pages/login_page.dart';
+import 'package:resident_zombies/pages/register_page.dart';
 import 'api/api.dart';
 import 'locale/app_localizations.dart';
 import 'model/routes.dart';
@@ -25,8 +25,8 @@ class _AppState extends State<App> {
   /// Initial route name
   /// All Classes on pages folder want to be an string routeName
   /// If u need a logic to define a start route
-  /// Ex: If user is previusly loggd show page A else render PageB
-  /// Use inistate to define that
+  /// Ex: If user is previusly loggd show pageA else render PageB
+  /// Use inistate to define a start loginc page
   String _initialRoute;
 
   /// used on provider
@@ -36,7 +36,7 @@ class _AppState extends State<App> {
   @override
   void initState() {
     super.initState();
-    _initialRoute = LoginPage.routeName;
+    _initialRoute = RegisterPage.routeName;
   }
 
   @override
