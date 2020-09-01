@@ -1,7 +1,13 @@
 import 'dart:core';
 
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+
 class Api {
-  String baseUrl = 'http://zssn-backend-example.herokuapp.com/';
+  /// TODO: come from a .env file
+  /// Use if u need to acces outside of this class
+  static final String baseUrl = 'http://zssn-backend-example.herokuapp.com';
+  final _dio = Dio();
 
   /// Trade an item
   ///
@@ -47,12 +53,37 @@ class Api {
   ///Implementation Notes
   Future<void> getAll() {}
 
-  /// Register a new survivor
+  ///Register a new survivor
+  ///curl -X POST --header 'Content-Type: application/x-www-form-urlencoded' --header 'Accept: application/json' -d 'person%5Bname%5D=dsadd&person%5Bage%5D=10.0&person%5Bgender%5D=m&items=dsadd%3Bdas' 'http://zssn-backend-example.herokuapp.com//zssn-backend-example.herokuapp.com/api/people.json'
+
   ///
   ///[POST]
-  ///Register new survivor
-  ///Receive a Person with its Inventory of Items
-  Future<void> register() {}
+  ///Required [String name] Required [int Age] Required [String gender]
+  ///Inventory Items required [items String ] in the format 'Fiji Water:10;Campbell Soup:5'
+  Future<void> register({
+    @required String name,
+    @required int age,
+    @required String gender,
+    @required String items,
+  }) async {
+    //TODO:TREAT REPONSE ERERORS
+    Map<dynamic, dynamic> body = {
+      'items': 'Fiji Water:10',
+      'person': {
+        'name': name,
+        'age': age,
+        'gender': gender,
+      }
+    };
+
+    _dio.options.contentType = Headers.formUrlEncodedContentType;
+    final _result = await _dio.post(
+        "http://zssn-backend-example.herokuapp.com/api/people",
+        data: body,
+        options: Options(contentType: Headers.formUrlEncodedContentType));
+
+    print(_result.data);
+  }
 
   /// [GET]
   /// String [id] Person UUID
