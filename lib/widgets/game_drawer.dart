@@ -5,14 +5,14 @@ class GameDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
         itemCount: drawerItems.length,
-        itemBuilder: (context, index) => ListTile(
-              title: Text(drawerItems[index].label),
-            ));
+        itemBuilder: (context, index) =>
+            ListTile(title: Text(drawerItems[index].label)));
   }
 }
 
 final List<DrawerItem> drawerItems = [
   DrawerItem(label: 'Perfil'),
+  DrawerItem(label: 'Meus ítens'),
   DrawerItem(label: 'Amigos'),
   DrawerItem(label: 'Todos jogadores'),
 ];
