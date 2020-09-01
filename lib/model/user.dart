@@ -8,8 +8,14 @@ class User {
   final int age;
   final Gender gender;
   final LatLng lastLocation;
+  final bool infected;
+  final String createdAt;
+  final String updatedAt;
 
   User({
+    this.updatedAt,
+    this.infected,
+    this.createdAt,
     this.name,
     this.id,
     this.age,
