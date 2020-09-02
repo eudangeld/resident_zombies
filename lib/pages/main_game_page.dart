@@ -5,13 +5,13 @@ import '../widgets/game_drawer.dart';
 import '../widgets/loading_widget.dart';
 import '../model/user.dart';
 
-class MaingamePage extends StatefulWidget {
+class MainGamePage extends StatefulWidget {
   static String get routeName => '@routes/main_game_page';
   @override
-  _MaingamePageState createState() => _MaingamePageState();
+  _MainGamePageState createState() => _MainGamePageState();
 }
 
-class _MaingamePageState extends State<MaingamePage> {
+class _MainGamePageState extends State<MainGamePage> {
   GoogleMapController _controller;
   BitmapDescriptor _markerIcon;
   Set<Marker> _markers = Set<Marker>();

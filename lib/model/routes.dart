@@ -13,7 +13,7 @@ List<String> get useLoggedRoutes => [];
 /// this obj are used on main class
 Map<String, WidgetBuilder> get appRoutes => {
       RegisterPage.routeName: (_) => RegisterPage(),
-      MaingamePage.routeName: (_) => MaingamePage(),
+      MainGamePage.routeName: (_) => MainGamePage(),
       AllPLayersPage.routeName: (_) => AllPLayersPage(),
       PlayerProfilePage.routeName: (_) => PlayerProfilePage(),
       SurvivorItemsPage.routeName: (_) => SurvivorItemsPage(),

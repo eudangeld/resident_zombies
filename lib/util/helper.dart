@@ -29,14 +29,20 @@ Future<User> registeruserOnDevice(User user) async {
   await prefs.setString('name', user.name);
   await prefs.setString('gender', user.gender.toString());
   await prefs.setInt('age', user.age);
-  await prefs.setDouble('lat', user.lastLocation?.latitude ?? '');
-  await prefs.setDouble('lng', user.lastLocation?.longitude ?? '');
-  return User(
-      id: user.id,
-      name: user.name,
-      age: user.age,
-      gender: user.gender,
-      lastLocation: user.lastLocation ?? '');
+  await prefs.setDouble('lat', user.lastLocation?.latitude ?? 0.0);
+  await prefs.setDouble('lng', user.lastLocation?.longitude ?? 0.0);
+  print('Saving user on device');
+  user.toString();
+  return user;
+}
+
+/// Check for stored [id] on device
+///
+/// if [true] means that user was connect before
+/// used to define the [initialRoute] on main
+Future<bool> checkStoredDataOnDevice() async {
+  final prefs = await localStorage();
+  return prefs.containsKey('id');
 }
 
 Future<SharedPreferences> localStorage() async {
