@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:resident_zombies/pages/profile_page.dart';
 import 'package:resident_zombies/util/helper.dart';
 import '../widgets/game_drawer.dart';
 import '../widgets/loading_widget.dart';
@@ -34,7 +35,10 @@ class _MainGamePageState extends State<MainGamePage> {
   void _userMark() {
     if (_markerIcon == null) {
       BitmapDescriptor.fromAssetImage(
-              createLocalImageConfiguration(context), 'assets/zombie_001.png')
+              createLocalImageConfiguration(context,
+                  size: Size(MediaQuery.of(context).size.width * 01,
+                      MediaQuery.of(context).size.width * 01)),
+              'assets/zplayer_map_icon.png')
           .then(_updateMarker);
     }
   }
@@ -56,25 +60,42 @@ class _MainGamePageState extends State<MainGamePage> {
     return Scaffold(
       appBar: AppBar(),
       drawer: Drawer(child: GameDrawer()),
-      body: StreamBuilder(
-          stream: state(context).currentMapPosition,
-          builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
-            if (snapshot.hasData) {
-              updatePosition();
-              return GoogleMap(
-                myLocationButtonEnabled: false,
-                mapType: MapType.normal,
-                initialCameraPosition: CameraPosition(
-                    target: state(context).user.value.lastLocation ??
-                        LatLng(-23.5489, -46.6388),
-                    zoom: 17.0),
-                onMapCreated: _onMapCreated,
-                markers: _markers,
-              );
-            }
+      body: FutureBuilder(
+        future: api(context).getAll(),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          if (snapshot.hasData) {
+            final _all = snapshot.data as List<dynamic>;
+            _markers = Set<Marker>();
+            _markers.addAll(_all.map(
+              (f) => Marker(
+                  onTap: () => print(strToCrdinates(f['lonlat'])),
+                  icon: _markerIcon,
+                  infoWindow: InfoWindow(
+                    title: f['name'],
+                    snippet: 'Ver perfil',
+                    onTap: () => Navigator.of(context).pushNamed(
+                        PlayerProfilePage.routeName,
+                        arguments: getIdFromLocation(f['location'])),
+                  ),
+                  markerId: MarkerId(f['name']),
+                  position: strToCrdinates(f['lonlat'])),
+            ));
+            return GoogleMap(
+              myLocationButtonEnabled: true,
+              zoomControlsEnabled: true,
+              mapType: MapType.normal,
+              initialCameraPosition: CameraPosition(
+                  target: state(context).user.value.lastLocation ??
+                      LatLng(-51.127134, -29.690994),
+                  zoom: 8.0),
+              onMapCreated: _onMapCreated,
+              markers: _markers,
+            );
+          }
 
-            return Loading();
-          }),
+          return Loading();
+        },
+      ),
     );
   }
 

@@ -30,3 +30,4 @@ flutter:
   assets:
     - assets/zombie_001.png
     - assets/zombie_002.png
+    - assets/player_map_icon.png

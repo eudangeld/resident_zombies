@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:resident_zombies/model/app_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -34,6 +35,20 @@ Future<User> registeruserOnDevice(User user) async {
   print('Saving user on device');
   user.toString();
   return user;
+}
+
+/// Convert userData POINT STR to LatLng
+///
+///TODO: FIND a better strategy to do that
+LatLng strToCrdinates(String point) {
+  if (point == null) {
+    return LatLng(0.0, 0.0);
+  }
+  final _raw = point.replaceAll('POINT (', '').replaceAll(')', '');
+  final _lat = _raw.split(' ')[0];
+  final _lng = _raw.split(' ')[1];
+
+  return LatLng(double.tryParse(_lat), double.tryParse(_lng));
 }
 
 /// Check for stored [id] on device
