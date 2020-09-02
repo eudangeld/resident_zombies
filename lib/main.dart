@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
 import 'package:resident_zombies/model/app_state.dart';
-import 'package:resident_zombies/pages/all_players_page.dart';
 import 'package:resident_zombies/pages/main_game_page.dart';
 import 'package:resident_zombies/pages/register_page.dart';
+import 'package:resident_zombies/theme/global_theme.dart';
+
 import 'api/api.dart';
 import 'locale/app_localizations.dart';
 import 'model/routes.dart';
@@ -82,7 +83,7 @@ class _AppState extends State<App> {
                     appBarTheme: AppBarTheme(
                         brightness: Brightness.light,
                         elevation: 0,
-                        color: Color(0xff3a556a)),
+                        color: heavyDark),
                   ),
                   title: 'The resident zombies',
                   initialRoute: _initialRoute,
@@ -108,17 +109,13 @@ class _AppState extends State<App> {
 
   Route<dynamic> useGenerateRoute(RouteSettings settings) {
     if (appRoutes.containsKey(settings.name)) {
-      // final builder = appRoutes[settings.name];
+      final builder = appRoutes[settings.name];
 
-      if (appRoutes.containsKey(settings.name)) {
-        final builder = appRoutes[settings.name];
-
-        return inPageRoute(builder(context),
-            RouteSettings(name: settings.name, arguments: settings.arguments));
-      }
+      return inPageRoute(builder(context),
+          RouteSettings(name: settings.name, arguments: settings.arguments));
     }
 
-    /// Just to test initial route failures
+    /// Just to test initial route failures or route fails
     ///
     ///
     return inPageRoute(NotFoundPage());
