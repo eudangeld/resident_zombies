@@ -18,7 +18,7 @@ class _GameDrawerState extends State<GameDrawer> {
     drawerItems = [
       DrawerItem(
           label: lz(context).drawerProfile, route: PlayerProfilePage.routeName),
-      DrawerItem(label: lz(context).drawereMap, route: MaingamePage.routeName),
+      DrawerItem(label: lz(context).drawereMap, route: MainGamePage.routeName),
       DrawerItem(
           label: lz(context).drawerItens, route: PlayerProfilePage.routeName),
       DrawerItem(label: lz(context).drawerFriends),

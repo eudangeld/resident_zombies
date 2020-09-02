@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:resident_zombies/model/user.dart';
 import 'package:resident_zombies/pages/main_game_page.dart';
 import 'package:resident_zombies/util/helper.dart';
 import 'package:resident_zombies/widgets/bottom_sheet_button.dart';
@@ -51,8 +52,15 @@ class _RegisterPageState extends State<RegisterPage> {
         items: '',
       );
       if (_registerResult != null) {
-        await Navigator.of(context)
-            .pushReplacementNamed(MaingamePage.routeName);
+        registeruserOnDevice(User(
+          id: _registerResult['id'],
+          name: _registerResult['name'],
+          age: _registerResult['age'],
+          gender: _registerResult['gender'].toString(),
+          infected: _registerResult['infected'],
+        ));
+        // await Navigator.of(context)
+        //     .pushReplacementNamed(MaingamePage.routeName);
       }
       setState(() {
         _loading = false;
@@ -67,54 +75,60 @@ class _RegisterPageState extends State<RegisterPage> {
           label: lz(context).register,
           onPressed: () => submitFormAction(context)),
       appBar: AppBar(title: Text(lz(context).registerPageBarTitle)),
-      body: Form(
-        key: _loginFormKey,
-        child: _loading
-            ? Loading()
-            : SingleChildScrollView(
-                child: Container(
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.all(30),
-                        child: Image.asset('assets/zombie_002.png'),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Text(lz(context).registerPageBodyTitle,
-                            textAlign: TextAlign.center,
-                            style:
-                                TextStyle(color: Colors.black, fontSize: 22)),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Container(
-                          child: Column(
-                            children: <Widget>[
-                              _field(
-                                controller: _nameController,
-                                validator: (String value) => value.isEmpty
-                                    ? lz(context).nameFormError
-                                    : null,
-                                hint: lz(context).nameFormHint,
-                              ),
-                              SizedBox(height: 30),
-                              _field(
-                                inputType: TextInputType.number,
-                                controller: _ageController,
-                                validator: (String value) => value.isEmpty
-                                    ? lz(context).ageFormError
-                                    : null,
-                                hint: lz(context).ageFormHint,
-                              ),
-                            ],
-                          ),
+      body: Padding(
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: Form(
+          key: _loginFormKey,
+          child: _loading
+              ? Loading()
+              : SingleChildScrollView(
+                  child: Container(
+                    child: Column(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.all(30),
+                          child: Container(
+                              width: MediaQuery.of(context).size.width * .3,
+                              child: Image.asset('assets/zombie_002.png')),
                         ),
-                      )
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Text(lz(context).registerPageBodyTitle,
+                              textAlign: TextAlign.center,
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 22)),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Container(
+                            child: Column(
+                              children: <Widget>[
+                                _field(
+                                  controller: _nameController,
+                                  validator: (String value) => value.isEmpty
+                                      ? lz(context).nameFormError
+                                      : null,
+                                  hint: lz(context).nameFormHint,
+                                ),
+                                SizedBox(height: 30),
+                                _field(
+                                  inputType: TextInputType.number,
+                                  controller: _ageController,
+                                  validator: (String value) => value.isEmpty
+                                      ? lz(context).ageFormError
+                                      : null,
+                                  hint: lz(context).ageFormHint,
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
-              ),
+        ),
       ),
     );
   }
