@@ -6,7 +6,7 @@ class User {
   final String name;
   final String id;
   final int age;
-  final Gender gender;
+  final String gender;
   final LatLng lastLocation;
   final bool infected;
   final String createdAt;
@@ -22,4 +22,17 @@ class User {
     this.gender,
     this.lastLocation,
   });
+
+  @override
+  String toString() {
+    print('Name:$name');
+    print('id:$id');
+    print('age:$age');
+    print('gender:$gender');
+    print('lastLocation:$lastLocation');
+    print('infected:$infected');
+    print('createdAt:$createdAt');
+    print('updatedAt:$updatedAt');
+    return super.toString();
+  }
 }
