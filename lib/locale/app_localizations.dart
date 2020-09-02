@@ -1,6 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
+//// Store all strings of the game
+///
+/// i think the best way to keep this class usefull is grouping in blocks
+/// by experience this class can be infected by disorder virus quickly.
+/// Stay alert!
 class AppLocalizations {
   AppLocalizations(this.locale);
 
@@ -14,7 +19,9 @@ class AppLocalizations {
   String get back => 'Voltar';
   String get notFound => 'Não encontrada';
 
-  /// REGISTER PAGE LOCALESSSS
+  /// Register_page
+  ///
+  /// Keep here all string s related to the registerpage here
   String get registerPageBodyTitle =>
       'Pelo visto você ainda não é um sobrevivente, faça seu cadastro e veja se realmente se garante.';
 
@@ -28,6 +35,16 @@ class AppLocalizations {
   String get register => 'Cadastrar';
 
   ///
+  ///
+
+  ///Drawer menu
+  ///
+  ///
+  String get drawerProfile => 'Perfil';
+  String get drawereMap => 'Mapa';
+  String get drawerItens => 'Meus itens';
+  String get drawerFriends => 'Amigos';
+  String get drawerAllPlayers => 'Todos os jogadores';
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
