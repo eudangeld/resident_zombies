@@ -77,27 +77,26 @@ class _AppState extends State<App> {
                 inProvider<AppState>(_state),
               ],
               child: MaterialApp(
-                theme: ThemeData(
-                  scaffoldBackgroundColor: Colors.white,
-                  appBarTheme: AppBarTheme(
-                      brightness: Brightness.light,
-                      elevation: 0,
-                      color: Color(0xff3a556a)),
-                ),
-                title: 'The resident zombies',
-                initialRoute: _initialRoute,
-                onGenerateRoute: useGenerateRoute,
-                localizationsDelegates: [
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                  GlobalCupertinoLocalizations.delegate,
-                  AppLocalizationsDelegate(),
-                ],
-                supportedLocales: [
-                  const Locale.fromSubtags(
-                      languageCode: 'pt', countryCode: 'BR'),
-                ],
-              ),
+                  theme: ThemeData(
+                    scaffoldBackgroundColor: Colors.white,
+                    appBarTheme: AppBarTheme(
+                        brightness: Brightness.light,
+                        elevation: 0,
+                        color: Color(0xff3a556a)),
+                  ),
+                  title: 'The resident zombies',
+                  initialRoute: _initialRoute,
+                  onGenerateRoute: useGenerateRoute,
+                  localizationsDelegates: [
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                    GlobalCupertinoLocalizations.delegate,
+                    AppLocalizationsDelegate(),
+                  ],
+                  supportedLocales: [
+                    const Locale.fromSubtags(
+                        languageCode: 'pt', countryCode: 'BR')
+                  ]),
             );
           }
           return Container(
