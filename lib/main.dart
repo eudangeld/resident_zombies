@@ -48,22 +48,20 @@ class _AppState extends State<App> {
     super.initState();
     _api = Api();
     _state = AppState();
-    // _defineInitialRoute();
-    // _initialRoute = RegisterPage.routeName;
-    // _initialRoute = MaingamePage.routeName;
-    // _initialRoute = AllPLayersPage.routeName;
   }
 
   /// Used to define initial route
   ///
   /// check for data on device
   /// define initial route
+  /// and set an initial user on state
   Future<bool> _defineInitialRoute() async {
     final _result = await checkStoredDataOnDevice();
     _result
         ? _initialRoute = MainGamePage.routeName
         : _initialRoute = RegisterPage.routeName;
 
+    _state.user.add(await userFromStorage());
     return _result;
   }
 
