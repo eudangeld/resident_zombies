@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:resident_zombies/pages/survivor_items_page.dart';
 import 'package:resident_zombies/theme/global_theme.dart';
-import 'package:resident_zombies/widgets/button.dart';
 import 'package:resident_zombies/widgets/loading_widget.dart';
 
 import '../util/helper.dart';

@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:resident_zombies/model/app_state.dart';
 import 'package:resident_zombies/pages/main_game_page.dart';
+import 'package:resident_zombies/pages/profile_page.dart';
 import 'package:resident_zombies/pages/register_page.dart';
 import 'package:resident_zombies/theme/global_theme.dart';
 
