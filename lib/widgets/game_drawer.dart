@@ -13,14 +13,13 @@ class _GameDrawerState extends State<GameDrawer> {
   List<DrawerItem> drawerItems;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     drawerItems = [
       DrawerItem(
           label: lz(context).drawerProfile, route: PlayerProfilePage.routeName),
       DrawerItem(label: lz(context).drawereMap, route: MainGamePage.routeName),
-      DrawerItem(
-          label: lz(context).drawerItens, route: PlayerProfilePage.routeName),
+      DrawerItem(label: lz(context).drawerItens),
       DrawerItem(label: lz(context).drawerFriends),
       DrawerItem(
           label: lz(context).drawerAllPlayers, route: AllPLayersPage.routeName),
@@ -32,9 +31,8 @@ class _GameDrawerState extends State<GameDrawer> {
     return ListView.builder(
         itemCount: drawerItems.length,
         itemBuilder: (context, index) => ListTile(
-              onTap: drawerItems[index].route != null
-                  ? Navigator.of(context).pushNamed(drawerItems[index].route)
-                  : '',
+              onTap: () => Navigator.of(context).pushNamed(
+                  drawerItems[index].route ?? MainGamePage.routeName),
               title: Text(drawerItems[index].label),
             ));
   }
