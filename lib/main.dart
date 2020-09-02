@@ -82,7 +82,7 @@ class _AppState extends State<App> {
                   appBarTheme: AppBarTheme(
                       brightness: Brightness.light,
                       elevation: 0,
-                      color: Colors.lightGreenAccent),
+                      color: Color(0xff3a556a)),
                 ),
                 title: 'The resident zombies',
                 initialRoute: _initialRoute,
