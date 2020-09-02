@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:resident_zombies/pages/survivor_items_page.dart';
+import 'package:resident_zombies/theme/global_theme.dart';
+import 'package:resident_zombies/widgets/button.dart';
 import 'package:resident_zombies/widgets/loading_widget.dart';
 
 import '../util/helper.dart';
@@ -15,7 +17,16 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
   final _labelStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 18);
   final _valueStyle = TextStyle(fontSize: 15);
   final _nameStyle = TextStyle(fontSize: 25, fontWeight: FontWeight.bold);
+  final _actionTextStyle =
+      TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white);
   final _defaultItensGap = 15.0;
+
+  /// Actions buttons values
+  ///
+  // Used on Material button elevation
+  final _defaultElevationValues = 1.0;
+  // minbox height used to manting a good layout on button actions
+  final _minButtonHeight = 70.0;
 
   @override
   void didChangeDependencies() {
@@ -27,7 +38,9 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text('Perfil'),
+      ),
       body: FutureBuilder(
           future: api(context).getSurvivor(routeArgs),
           builder: (BuildContext context, snapshot) {
@@ -35,6 +48,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
               dynamic _profileData = snapshot.data;
               return Column(
                 children: <Widget>[
+                  SizedBox(height: _defaultItensGap),
                   Container(
                       width: MediaQuery.of(context).size.width * .40,
                       decoration: BoxDecoration(
@@ -45,14 +59,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                   SizedBox(height: _defaultItensGap),
                   Text(_profileData['name'] ?? lz(context).profileUnknowValue,
                       style: _nameStyle),
-                  Row(children: <Widget>[
-                    InkWell(
-                      child: Text(lz(context).profileSeeitens),
-                      onTap: () => Navigator.of(context).popAndPushNamed(
-                          SurvivorItemsPage.routeName,
-                          arguments: routeArgs),
-                    )
-                  ]),
+                  SizedBox(height: 35),
                   Row(
                     children: <Widget>[
                       Expanded(
@@ -92,6 +99,67 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                             ]),
                       ),
                     ],
+                  ),
+
+                  SizedBox(height: 35),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 50),
+                    child: Divider(color: heavyDark),
+                  ),
+                  SizedBox(height: 35),
+
+                  /// SCREEN ACTIONS
+                  ///
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(children: <Widget>[
+                      Expanded(
+                        child: ConstrainedBox(
+                          constraints:
+                              BoxConstraints(minHeight: _minButtonHeight),
+                          child: MaterialButton(
+                              elevation: _defaultElevationValues,
+                              color: heavyDark,
+                              child: Text(lz(context).profileSeeitens,
+                                  style: _actionTextStyle,
+                                  textAlign: TextAlign.center),
+                              onPressed: () => Navigator.of(context).pushNamed(
+                                  SurvivorItemsPage.routeName,
+                                  arguments: routeArgs)),
+                        ),
+                      ),
+                      SizedBox(width: 20),
+                      Expanded(
+                        child: ConstrainedBox(
+                          constraints:
+                              BoxConstraints(minHeight: _minButtonHeight),
+                          child: MaterialButton(
+                              elevation: _defaultElevationValues,
+                              color: heavyDark,
+                              child: Text(
+                                'Ver ítens',
+                                style: _actionTextStyle,
+                                textAlign: TextAlign.center,
+                              ),
+                              onPressed: () => print('ver itens')),
+                        ),
+                      ),
+                      SizedBox(width: 20),
+                      Expanded(
+                        child: ConstrainedBox(
+                          constraints:
+                              BoxConstraints(minHeight: _minButtonHeight),
+                          child: MaterialButton(
+                              padding: EdgeInsets.all(10),
+                              color: heavyDark,
+                              elevation: _defaultElevationValues,
+                              child: Text('Ver no mapa',
+                                  style: _actionTextStyle,
+                                  textAlign: TextAlign.center),
+                              onPressed: () => print('vamos lá')),
+                        ),
+                      ),
+                    ]),
                   ),
                 ],
               );

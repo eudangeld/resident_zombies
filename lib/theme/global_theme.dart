@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
+final heavyDark = Color(0xff3a556a);
+
 LinearGradient zombieGradient = LinearGradient(
   begin: Alignment.topCenter,
   end: Alignment.bottomCenter,

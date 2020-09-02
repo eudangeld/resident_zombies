@@ -57,7 +57,11 @@ LatLng strToCrdinates(String point) {
 /// used to define the [initialRoute] on main
 Future<bool> checkStoredDataOnDevice() async {
   final prefs = await localStorage();
-  return prefs.containsKey('id');
+  final _hasKey = prefs.containsKey('id');
+  if (_hasKey) {
+    print(prefs.getString('id'));
+  }
+  return _hasKey;
 }
 
 Future<SharedPreferences> localStorage() async {
