@@ -40,6 +40,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
   /// Form action
   /// Called when register button is called
+  ///
+  /// If server return ok the object is used
+  /// to store a new User on device and state => user
   submitFormAction(context) async {
     if (_loginFormKey.currentState.validate()) {
       setState(() {
@@ -52,15 +55,15 @@ class _RegisterPageState extends State<RegisterPage> {
         items: '',
       );
       if (_registerResult != null) {
-        registeruserOnDevice(User(
-          id: _registerResult['id'],
-          name: _registerResult['name'],
-          age: _registerResult['age'],
-          gender: _registerResult['gender'].toString(),
-          infected: _registerResult['infected'],
-        ));
-        // await Navigator.of(context)
-        //     .pushReplacementNamed(MaingamePage.routeName);
+        state(context).user.add(await registerUserOnDevice(User(
+              id: _registerResult['id'],
+              name: _registerResult['name'],
+              age: _registerResult['age'],
+              gender: _registerResult['gender'].toString(),
+              infected: _registerResult['infected'],
+            )));
+        await Navigator.of(context)
+            .pushReplacementNamed(MainGamePage.routeName);
       }
       setState(() {
         _loading = false;

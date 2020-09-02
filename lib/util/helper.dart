@@ -23,7 +23,7 @@ AppState state(BuildContext context) =>
 /// Stores a [user] using shared preferences
 ///
 /// always replace last [User id] (Just one player yet)
-Future<User> registeruserOnDevice(User user) async {
+Future<User> registerUserOnDevice(User user) async {
   //TODO: ASSERT PROPS
   final prefs = await localStorage();
   await prefs.setString('id', user.id);
@@ -32,7 +32,6 @@ Future<User> registeruserOnDevice(User user) async {
   await prefs.setInt('age', user.age);
   await prefs.setDouble('lat', user.lastLocation?.latitude ?? 0.0);
   await prefs.setDouble('lng', user.lastLocation?.longitude ?? 0.0);
-  print('Saving user on device');
   user.toString();
   return user;
 }
@@ -55,13 +54,34 @@ LatLng strToCrdinates(String point) {
 ///
 /// if [true] means that user was connect before
 /// used to define the [initialRoute] on main
+///
 Future<bool> checkStoredDataOnDevice() async {
   final prefs = await localStorage();
   final _hasKey = prefs.containsKey('id');
-  if (_hasKey) {
-    print(prefs.getString('id'));
-  }
   return _hasKey;
+}
+
+/// Create an [User] on state
+///
+/// Check for storagedata to create
+/// if dosen't have an user id stored on device store an empty user on state
+Future<User> userFromStorage() async {
+  final prefs = await localStorage();
+  User _result = User();
+
+  if (await checkStoredDataOnDevice()) {
+    _result = User(
+        age: prefs.getInt('age'),
+        name: prefs.getString('name'),
+        id: prefs.getString('id'),
+        gender: prefs.getString('gender'),
+        lastLocation: LatLng(
+          prefs.getDouble('lat'),
+          prefs.getDouble('lng'),
+        ));
+  }
+
+  return _result;
 }
 
 Future<SharedPreferences> localStorage() async {

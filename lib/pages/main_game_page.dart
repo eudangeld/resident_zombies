@@ -38,7 +38,7 @@ class _MainGamePageState extends State<MainGamePage> {
               createLocalImageConfiguration(context,
                   size: Size(MediaQuery.of(context).size.width * 01,
                       MediaQuery.of(context).size.width * 01)),
-              'assets/zplayer_map_icon.png')
+              'assets/player_map_icon.png')
           .then(_updateMarker);
     }
   }

@@ -27,11 +27,14 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
   // minbox height used to manting a good layout on button actions
   final _minButtonHeight = 70.0;
 
+  /// Get [id] from routeArgments and call userData
+  ///
+  /// If [id] is null use player [id] itself
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    routeArgs = ModalRoute.of(context).settings.arguments;
-    print(routeArgs);
+    routeArgs = ModalRoute.of(context).settings.arguments ??
+        state(context).user.value.id;
   }
 
   @override
@@ -45,6 +48,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
           builder: (BuildContext context, snapshot) {
             if (snapshot.hasData) {
               dynamic _profileData = snapshot.data;
+              print(_profileData['id']);
               return Column(
                 children: <Widget>[
                   SizedBox(height: _defaultItensGap),
@@ -58,6 +62,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                   SizedBox(height: _defaultItensGap),
                   Text(_profileData['name'] ?? lz(context).profileUnknowValue,
                       style: _nameStyle),
+
                   SizedBox(height: 35),
                   Row(
                     children: <Widget>[
