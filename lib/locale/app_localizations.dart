@@ -3,6 +3,8 @@ import 'package:flutter/widgets.dart';
 
 //// Store all strings of the game
 ///
+/// Avoid things like => common or global always prefer specificate page values
+/// even the values became duplicated
 /// i think the best way to keep this class usefull is grouping in blocks
 /// by experience this class can be infected by disorder virus quickly.
 /// Stay alert!
@@ -35,7 +37,16 @@ class AppLocalizations {
   String get register => 'Cadastrar';
 
   ///
+  ///Player profile page
   ///
+  ///
+  String get profileUnknowValue => 'Não informado';
+  String get profileSeeitens => 'Ver ítens';
+  String get profileStatusYes => 'S';
+  String get profileStatusNo => 'N';
+  String get profileAge => 'idade';
+  String get profileGender => 'sexo';
+  String get profileStatusTitle => 'infectado';
 
   ///Drawer menu
   ///
