@@ -73,26 +73,30 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
   /// Devnotes: call [api(context).strafeSomeone] if u want to infect someone
 
   _reportInfection() async {
-    final Response<dynamic> _response = await api(context)
-        .reportInfection(state(context).user.value.id, _currentUser.id);
+    if (state(context).user.value.id == _currentUser.id) {
+      reportOurselfAlert(context);
+    } else {
+      final Response<dynamic> _response = await api(context)
+          .reportInfection(state(context).user.value.id, _currentUser.id);
 
-    print(_response.statusCode);
-    print(_response.statusMessage);
-    print(_response.data);
+      print(_response.statusCode);
+      print(_response.statusMessage);
+      print(_response.data);
 
-    switch (_response.statusCode) {
-      case 200:
-        reportInfeteddAlertSuccess(context);
-        break;
-      case 202:
-        reportInfeteddAlertSuccess(context);
-        break;
-      case 204:
-        reportInfeteddAlertSuccess(context);
-        break;
-      case 422:
-        reportInfeteddAlertSpam(context);
-        break;
+      switch (_response.statusCode) {
+        case 200:
+          reportInfeteddAlertSuccess(context);
+          break;
+        case 202:
+          reportInfeteddAlertSuccess(context);
+          break;
+        case 204:
+          reportInfeteddAlertSuccess(context);
+          break;
+        case 422:
+          reportInfeteddAlertSpam(context);
+          break;
+      }
     }
   }
 
