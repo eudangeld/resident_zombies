@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:resident_zombies/model/trade_item_details.dart';
-import 'package:resident_zombies/theme/global_theme.dart';
 import 'package:resident_zombies/util/helper.dart';
 import 'package:resident_zombies/widgets/bottom_sheet_button.dart';
 import 'package:resident_zombies/widgets/loading_widget.dart';
@@ -8,6 +7,14 @@ import 'package:rxdart/subjects.dart';
 
 class TradeDetailsPage extends StatelessWidget {
   static String get routeName => '@routes/itens_quantity';
+
+  /// This strewans will store the sum from trade
+  /// and will used when user tap CTA bottomSheetButtonm
+  ///
+  // ignore: close_sinks
+  final _requiredItensTotalPoints = BehaviorSubject<int>.seeded(0);
+  // ignore: close_sinks
+  final _paymentTotalPoints = BehaviorSubject<int>.seeded(0);
 
   @override
   Widget build(BuildContext context) {
@@ -22,17 +29,19 @@ class TradeDetailsPage extends StatelessWidget {
         body: SingleChildScrollView(
           child: Column(children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(top: 20, bottom: 30),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: List.filled(5,
-                      Icon(Icons.arrow_back, size: 40, color: Colors.green))),
-            ),
+                padding: const EdgeInsets.only(top: 20, bottom: 30),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: List.filled(
+                        5,
+                        Icon(Icons.arrow_back,
+                            size: 40, color: Colors.green)))),
 
             /// Survivor itens
             ///
             ///
-            itenDetailsWidget(context, state(context).traderId),
+            itenDetailsWidget(
+                context, state(context).traderId, _requiredItensTotalPoints),
 
             Padding(padding: const EdgeInsets.all(20.0), child: Divider()),
 
@@ -46,7 +55,8 @@ class TradeDetailsPage extends StatelessWidget {
 
             /// Player itens
             ///
-            itenDetailsWidget(context, state(context).user.value.id),
+            itenDetailsWidget(
+                context, state(context).user.value.id, _paymentTotalPoints),
 
             SizedBox(height: 120)
           ]),
@@ -54,7 +64,8 @@ class TradeDetailsPage extends StatelessWidget {
   }
 
   /// Show current player itens
-  Widget itenDetailsWidget(BuildContext context, String id) {
+  Widget itenDetailsWidget(
+      BuildContext context, String id, BehaviorSubject totalStream) {
     return Container(
       child: FutureBuilder(
           future: api(context).getSurvivorItems(id),
@@ -98,6 +109,7 @@ class TradeDetailsPage extends StatelessWidget {
             return Column(
                 children: []
                   ..add(TotalPOintsIndicator(
+                      total: totalStream,
                       baseColor: _playerItens ? Colors.red : Colors.green,
                       steppers: _steppers))
                   ..addAll(_steppers));
@@ -106,15 +118,47 @@ class TradeDetailsPage extends StatelessWidget {
   }
 }
 
+///
+/// a button that just verify the possbility to trade
+///
+/// receive from [TradeDetailsPage] the trade values
+/// [required] represents total points needed
+/// [playerTotal] represent player points offered to make this trade
+
+class AdvanceTRadeButton extends StatelessWidget {
+  final int requiredTotal;
+  final int playerTotal;
+
+  const AdvanceTRadeButton({
+    Key key,
+    this.requiredTotal,
+    this.playerTotal,
+  }) : super(key: key);
+
+  bool get checkValuesBalance => playerTotal >= requiredTotal;
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomSheetButton(
+      label: checkValuesBalance ? 'Continuar' : 'Não vai rolar',
+      onPressed: () => print('adicionando item na sacola'),
+    );
+  }
+}
+
 // This class get the total point involved in the current transaction
 // ignore: must_be_immutable
 class TotalPOintsIndicator extends StatefulWidget {
+  final BehaviorSubject<int> total;
   final List<ItensStepper> steppers;
   final Color baseColor;
 
-  const TotalPOintsIndicator(
-      {Key key, @required this.steppers, @required this.baseColor})
-      : super(key: key);
+  const TotalPOintsIndicator({
+    Key key,
+    @required this.steppers,
+    @required this.baseColor,
+    @required this.total,
+  }) : super(key: key);
 
   @override
   _TotalPOintsIndicatorState createState() => _TotalPOintsIndicatorState();
@@ -128,9 +172,8 @@ class _TotalPOintsIndicatorState extends State<TotalPOintsIndicator> {
       element.streamTotal.listen((event) {
         total = 0;
         widget.steppers.forEach((e) {
-          setState(() {
-            total += e.streamTotal.value;
-          });
+          setState(() => total += e.streamTotal.value);
+          total.toStringAsFixed(total);
         });
       });
     });
