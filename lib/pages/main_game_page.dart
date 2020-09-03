@@ -58,45 +58,53 @@ class _MainGamePageState extends State<MainGamePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      drawer: Drawer(child: GameDrawer()),
-      body: FutureBuilder(
-        future: api(context).getAll(),
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          if (snapshot.hasData) {
-            final _all = snapshot.data as List<dynamic>;
-            _markers = Set<Marker>();
-            _markers.addAll(_all.map(
-              (f) => Marker(
-                  onTap: () => print(strToCrdinates(f['lonlat'])),
-                  icon: _markerIcon,
-                  infoWindow: InfoWindow(
-                    title: f['name'],
-                    snippet: 'Ver perfil',
-                    onTap: () => Navigator.of(context).pushNamed(
-                        PlayerProfilePage.routeName,
-                        arguments: getIdFromLocation(f['location'])),
-                  ),
-                  markerId: MarkerId(f['name']),
-                  position: strToCrdinates(f['lonlat'])),
-            ));
-            return GoogleMap(
-              myLocationButtonEnabled: true,
-              zoomControlsEnabled: true,
-              mapType: MapType.normal,
-              initialCameraPosition: CameraPosition(
-                  target: state(context).user.value.lastLocation ??
-                      LatLng(-51.127134, -29.690994),
-                  zoom: 8.0),
-              onMapCreated: _onMapCreated,
-              markers: _markers,
-            );
-          }
+        appBar: AppBar(),
+        drawer: Drawer(child: GameDrawer()),
+        body: FutureBuilder(
+            future: api(context).getAll(),
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+              if (snapshot.hasData) {
+                final _all = snapshot.data as List<dynamic>;
+                _markers = Set<Marker>();
+                _markers.addAll(_all.map(
+                  (f) => Marker(
+                      onTap: () => print(strToCrdinates(f['lonlat'])),
+                      icon: _markerIcon,
+                      infoWindow: InfoWindow(
+                        title: f['name'],
+                        snippet: 'Ver perfil',
+                        onTap: () => Navigator.of(context).pushNamed(
+                            PlayerProfilePage.routeName,
+                            arguments: getIdFromLocation(f['location'])),
+                      ),
+                      markerId: MarkerId(f['name']),
+                      position: strToCrdinates(f['lonlat'])),
+                ));
 
-          return Loading();
-        },
-      ),
-    );
+                return StreamBuilder<LatLng>(
+                    stream: state(context).currentMapPosition,
+                    builder:
+                        (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
+                      if (snapshot.hasData) {
+                        return GoogleMap(
+                          myLocationButtonEnabled: true,
+                          zoomControlsEnabled: true,
+                          mapType: MapType.normal,
+                          initialCameraPosition: CameraPosition(
+                              target: state(context).user.value.lastLocation ??
+                                  LatLng(snapshot.data.latitude,
+                                      snapshot.data.longitude),
+                              zoom: 8.0),
+                          onMapCreated: _onMapCreated,
+                          markers: _markers,
+                        );
+                      }
+                      return Loading();
+                    });
+              }
+
+              return Loading();
+            }));
   }
 
   void updatePosition() {

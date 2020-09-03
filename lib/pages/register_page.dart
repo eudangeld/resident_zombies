@@ -85,6 +85,10 @@ class _RegisterPageState extends State<RegisterPage> {
       // Stores result on [_registerLocation]
       await askForLocation();
 
+      //update state map location to show last location user
+      //in that case register location
+      state(context).currentMapPosition.add(_registerLocation);
+
       final _registerResult = await api(context).register(
           name: _nameController.text,
           age: int.tryParse(_ageController.text),
