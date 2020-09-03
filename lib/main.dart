@@ -62,6 +62,7 @@ class _AppState extends State<App> {
         : _initialRoute = RegisterPage.routeName;
 
     _state.user.add(await userFromStorage());
+    _state.currentMapPosition.add(_state.user.value.lastLocation);
     return _result;
   }
 
