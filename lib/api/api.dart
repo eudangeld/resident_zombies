@@ -132,11 +132,11 @@ class Api {
   ///String [infected]	 Person UUID with the infection suspect
   ///String [id]	 Person UUID with the infection suspect
   Future<dynamic> reportInfection(String playerId, String targetId) async {
-    //TODO:TREAT REPONSE ERERORS
     Map<dynamic, dynamic> body = {
       'infected': targetId,
       'id': playerId,
     };
+
     final dio = Dio();
     dynamic _result;
     try {
@@ -207,17 +207,14 @@ class Api {
     return _result.data;
   }
 
-  Future<dynamic> strafeSomeone() async {
-    final _target = 'c6ac5eee-119b-400a-b113-569dc87cd420';
-    final List<String> soldiers = [
-      'b448c294-182e-4839-8270-58ab6a12e840',
-      'dc80ed34-d25e-4713-971f-5ffaff39aeee',
-      '72aed513-65c0-4464-900f-379f1cbd6a07',
-      '2c44d1e7-3e53-4bab-af7d-18e3bee70234',
-      'c138e316-7b2c-4eab-b54c-8134bdb25b0b'
-    ];
-    for (var a in soldiers) {
-      await reportInfection(a, _target);
+  Future<dynamic> strafeSomeone(String targetId) async {
+    final List<dynamic> _army = await getAll() as List<dynamic>;
+
+    for (var a in _army) {
+      final _user = User.fromJson(a);
+      print('${_user.name} is firing');
+
+      await reportInfection(_user.id.toString(), targetId);
     }
   }
 }

@@ -4,6 +4,7 @@ import 'package:resident_zombies/model/user.dart';
 import 'package:resident_zombies/pages/main_game_page.dart';
 import 'package:resident_zombies/pages/survivor_items_page.dart';
 import 'package:resident_zombies/theme/global_theme.dart';
+import 'package:resident_zombies/util/alerts.dart';
 import 'package:resident_zombies/widgets/bottom_sheet_button.dart';
 import 'package:resident_zombies/widgets/loading_widget.dart';
 
@@ -65,17 +66,33 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
 
   /// Report infection
   ///
-  /// possible only on other players
   /// Note: no one runs away screaming I'm infected
-  /// DevNotes: i assume wich 202 response is an ok
-  /// Devnotes: i assume wich 422 error is a problema trying to report 2 times the same people
+  /// DevNotes: i assume wich 202 or 200 response is an ok
+  /// Devnotes: i assume wich 422 error is a problema trying to report more than 2 same id
+  /// Devnotes: i really dont like to use switch but i think this is better now
+  /// Devnotes: call [api(context).strafeSomeone] if u want to infect someone
+
   _reportInfection() async {
     final Response<dynamic> _response = await api(context)
         .reportInfection(state(context).user.value.id, _currentUser.id);
-    if (_response.statusCode == 202 || _response.statusCode == 200) {
-      print('');
-    } else {
-      print('algun outro porblema não detectado');
+
+    print(_response.statusCode);
+    print(_response.statusMessage);
+    print(_response.data);
+
+    switch (_response.statusCode) {
+      case 200:
+        reportInfeteddAlertSuccess(context);
+        break;
+      case 202:
+        reportInfeteddAlertSuccess(context);
+        break;
+      case 204:
+        reportInfeteddAlertSuccess(context);
+        break;
+      case 422:
+        reportInfeteddAlertSpam(context);
+        break;
     }
   }
 
