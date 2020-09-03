@@ -13,6 +13,8 @@ class PlayerProfilePage extends StatefulWidget {
 
 class _PlayerProfilePageState extends State<PlayerProfilePage> {
   dynamic routeArgs;
+
+  //TODO: move styles to theme and rename it
   final _labelStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 18);
   final _valueStyle = TextStyle(fontSize: 15);
   final _nameStyle = TextStyle(fontSize: 25, fontWeight: FontWeight.bold);
@@ -26,6 +28,10 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
   final _defaultElevationValues = 1.0;
   // minbox height used to manting a good layout on button actions
   final _minButtonHeight = 70.0;
+
+  ///[true] if data is from current player
+  /// add specifc styles and logic like no trade with me :(
+  bool _playerProfile = false;
 
   /// Get [id] from routeArgments and call userData
   ///
@@ -48,6 +54,8 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
           builder: (BuildContext context, snapshot) {
             if (snapshot.hasData) {
               dynamic _profileData = snapshot.data;
+              _playerProfile =
+                  _profileData['id'] == state(context).user.value.id;
               print(_profileData['id']);
               return Column(
                 children: <Widget>[
@@ -62,6 +70,20 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                   SizedBox(height: _defaultItensGap),
                   Text(_profileData['name'] ?? lz(context).profileUnknowValue,
                       style: _nameStyle),
+
+                  /// you know when u are seeing your profile
+                  /// add an (you) above name
+                  ///TODO:MOVE YOU TO LOCALIZATIONS
+                  _profileData['id'] == state(context).user.value.id
+                      ? Text(
+                          '(você)',
+                          style: _nameStyle.copyWith(
+                              fontWeight: FontWeight.normal),
+                        )
+                      : Container(),
+
+                  /// I dont know how health works
+                  // HealthBar(),
 
                   SizedBox(height: 35),
                   Row(

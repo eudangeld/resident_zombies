@@ -62,7 +62,13 @@ class Api {
 
   ///[GET]
   ///Average of non-infected (healthy) people
-  Future<void> nonInfected() {}
+  Future<void> getHealth() async {
+    final dio = Dio();
+    final _result = await dio.get(
+        'http://zssn-backend-example.herokuapp.com/api/report/non_infected');
+
+    print(_result.data);
+  }
 
   ///[GET]
   ///Average of the quantity of items per person (total and just non-infected) and of each item
