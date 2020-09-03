@@ -7,6 +7,7 @@ import 'package:resident_zombies/theme/global_theme.dart';
 import 'package:resident_zombies/util/alerts.dart';
 import 'package:resident_zombies/widgets/bottom_sheet_button.dart';
 import 'package:resident_zombies/widgets/loading_widget.dart';
+import 'package:resident_zombies/widgets/trade_itens_quantity.dart';
 
 import '../util/helper.dart';
 
@@ -209,21 +210,27 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                         ),
                       ),
                       SizedBox(width: 20),
-                      Expanded(
-                        child: ConstrainedBox(
-                          constraints:
-                              BoxConstraints(minHeight: _minButtonHeight),
-                          child: MaterialButton(
-                              elevation: _defaultElevationValues,
-                              color: heavyDark,
-                              child: Text(
-                                'Ver ítens',
-                                style: _actionTextStyle,
-                                textAlign: TextAlign.center,
+                      !_playerProfile
+                          ? Expanded(
+                              child: ConstrainedBox(
+                                constraints:
+                                    BoxConstraints(minHeight: _minButtonHeight),
+                                child: MaterialButton(
+                                    elevation: _defaultElevationValues,
+                                    color: heavyDark,
+                                    child: Text(
+                                      'Trocar ítens',
+                                      style: _actionTextStyle,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    onPressed: () {
+                                      state(context).traderId = _currentUser.id;
+                                      Navigator.of(context).pushNamed(
+                                          TradeDetailsPage.routeName);
+                                    }),
                               ),
-                              onPressed: () => print('ver itens')),
-                        ),
-                      ),
+                            )
+                          : Container(),
                       SizedBox(width: 20),
                       Expanded(
                         child: ConstrainedBox(

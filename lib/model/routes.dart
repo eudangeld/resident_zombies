@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:resident_zombies/pages/profile_page.dart';
 import 'package:resident_zombies/pages/survivor_items_page.dart';
+import 'package:resident_zombies/widgets/trade_itens_quantity.dart';
 import '../pages/all_players_page.dart';
 import '../pages/main_game_page.dart';
 import '../pages/register_page.dart';
@@ -17,4 +18,5 @@ Map<String, WidgetBuilder> get appRoutes => {
       AllPLayersPage.routeName: (_) => AllPLayersPage(),
       PlayerProfilePage.routeName: (_) => PlayerProfilePage(),
       SurvivorItemsPage.routeName: (_) => SurvivorItemsPage(),
+      TradeDetailsPage.routeName: (_) => TradeDetailsPage(),
     };
