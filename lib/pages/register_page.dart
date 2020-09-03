@@ -89,6 +89,7 @@ class _RegisterPageState extends State<RegisterPage> {
       //in that case register location
       state(context).currentMapPosition.add(_registerLocation);
 
+      /// TODO : implement toJosn on user class too
       final _registerResult = await api(context).register(
           name: _nameController.text,
           age: int.tryParse(_ageController.text),
@@ -97,13 +98,9 @@ class _RegisterPageState extends State<RegisterPage> {
           location: _registerLocation);
 
       if (_registerResult != null) {
-        state(context).user.add(await registerUserOnDevice(User(
-            id: _registerResult['id'],
-            name: _registerResult['name'],
-            age: _registerResult['age'],
-            gender: _registerResult['gender'],
-            infected: _registerResult['infected'],
-            lastLocation: _registerLocation)));
+        state(context)
+            .user
+            .add(await registerUserOnDevice(User.fromJson(_registerResult)));
         await Navigator.of(context)
             .pushReplacementNamed(MainGamePage.routeName);
       }
