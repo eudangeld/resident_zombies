@@ -129,7 +129,7 @@ class _RegisterPageState extends State<RegisterPage> {
           children: <Widget>[
             Text('MENINA', style: TextStyle(fontSize: 16.0)),
             Radio(
-                value: 'V',
+                value: 'F',
                 groupValue: _currentRadioValue,
                 onChanged: onRadioValueChange),
           ],
