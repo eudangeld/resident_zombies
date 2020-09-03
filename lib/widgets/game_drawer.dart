@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:resident_zombies/pages/all_players_page.dart';
 import 'package:resident_zombies/pages/main_game_page.dart';
 import 'package:resident_zombies/pages/profile_page.dart';
+import 'package:resident_zombies/pages/survivor_items_page.dart';
 import 'package:resident_zombies/util/helper.dart';
 
 class GameDrawer extends StatefulWidget {
@@ -19,8 +20,9 @@ class _GameDrawerState extends State<GameDrawer> {
       DrawerItem(
           label: lz(context).drawerProfile, route: PlayerProfilePage.routeName),
       DrawerItem(label: lz(context).drawereMap, route: MainGamePage.routeName),
-      DrawerItem(label: lz(context).drawerItens),
-      DrawerItem(label: lz(context).drawerFriends),
+      DrawerItem(
+          label: lz(context).drawerItens, route: SurvivorItemsPage.routeName),
+      // DrawerItem(label: lz(context).drawerFriends),
       DrawerItem(
           label: lz(context).drawerAllPlayers, route: AllPLayersPage.routeName),
     ];
