@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:core';
 
 import 'package:dio/dio.dart';
@@ -90,35 +91,7 @@ class Api {
 
   ///[GET]
   ///List of the Available Reports
-  Future<void> report() {}
-
-  ///Used to increase the infection count of a Person
-  ///String [infected]	 Person UUID with the infection suspect
-  ///String [id]	 Person UUID with the infection suspect
-  Future<void> reportInfection() {}
-
-  ///[GET]
-  ///Fetches all survivors
-  ///Implementation Notes
-  Future<dynamic> getAll() async {
-    final dio = Dio();
-    final _rresult =
-        await dio.get('http://zssn-backend-example.herokuapp.com/api/people');
-
-    return _rresult.data;
-  }
-
-  ///Fetches all survivors Itens
-  ///
-  ///[GET]
-  ///Use [person_id] to retrieve all itens information from
-  Future<dynamic> getSurvivorItems(String person_id) async {
-    final dio = Dio();
-    final _result = await dio.get(
-        'http://zssn-backend-example.herokuapp.com/api/people/$person_id/properties');
-
-    return _result.data;
-  }
+  Future<dynamic> report() {}
 
   ///
   ///[POST]
@@ -154,6 +127,55 @@ class Api {
     }
   }
 
+  ///Used to increase the infection count of a Person
+  ///[POST]
+  ///String [infected]	 Person UUID with the infection suspect
+  ///String [id]	 Person UUID with the infection suspect
+  Future<dynamic> reportInfection(String playerId, String targetId) async {
+    //TODO:TREAT REPONSE ERERORS
+    Map<dynamic, dynamic> body = {
+      'infected': targetId,
+      'id': playerId,
+    };
+    final dio = Dio();
+    dynamic _result;
+    try {
+      _result = await dio.post(
+          'http://zssn-backend-example.herokuapp.com/api/people/$playerId/report_infection',
+          data: body,
+          options: Options(contentType: Headers.formUrlEncodedContentType));
+    } on DioError catch (error) {
+      print('Error reporting infection');
+      print(error.response.statusCode);
+      _result = error.response;
+    }
+
+    return _result;
+  }
+
+  ///[GET]
+  ///Fetches all survivors
+  ///Implementation Notes
+  Future<dynamic> getAll() async {
+    final dio = Dio();
+    final _rresult =
+        await dio.get('http://zssn-backend-example.herokuapp.com/api/people');
+
+    return _rresult.data;
+  }
+
+  ///Fetches all survivors Itens
+  ///
+  ///[GET]
+  ///Use [person_id] to retrieve all itens information from
+  Future<dynamic> getSurvivorItems(String person_id) async {
+    final dio = Dio();
+    final _result = await dio.get(
+        'http://zssn-backend-example.herokuapp.com/api/people/$person_id/properties');
+
+    return _result.data;
+  }
+
   /// [GET]
   /// String [id] Person UUID
   /// Fetch a single survivor
@@ -183,5 +205,19 @@ class Api {
         "http://zssn-backend-example.herokuapp.com/api/people/${user.id}",
         data: body);
     return _result.data;
+  }
+
+  Future<dynamic> strafeSomeone() async {
+    final _target = 'c6ac5eee-119b-400a-b113-569dc87cd420';
+    final List<String> soldiers = [
+      'b448c294-182e-4839-8270-58ab6a12e840',
+      'dc80ed34-d25e-4713-971f-5ffaff39aeee',
+      '72aed513-65c0-4464-900f-379f1cbd6a07',
+      '2c44d1e7-3e53-4bab-af7d-18e3bee70234',
+      'c138e316-7b2c-4eab-b54c-8134bdb25b0b'
+    ];
+    for (var a in soldiers) {
+      await reportInfection(a, _target);
+    }
   }
 }
