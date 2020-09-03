@@ -4,6 +4,7 @@ import 'package:resident_zombies/pages/main_game_page.dart';
 import 'package:resident_zombies/util/helper.dart';
 import 'package:resident_zombies/widgets/bottom_sheet_button.dart';
 import 'package:resident_zombies/widgets/loading_widget.dart';
+import 'package:geolocator/geolocator.dart';
 
 class RegisterPage extends StatefulWidget {
   static String get routeName => '@routes/register_page';
@@ -15,10 +16,17 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final _loginFormKey = GlobalKey<FormState>();
 
+  /// Controllers for input texts
   final _nameController = TextEditingController();
   final _ageController = TextEditingController();
 
+  ///when [true] hide current content and shows a circular prog indicator
+  /// normally used to process async loginc with server
+  /// but is possible use then to hjus tshow some feedback to users
+  ///
   bool _loading = false;
+
+  String _currentRadioValue = "M";
 
   /// Return a simple form filed
   /// Refact: Move to build
@@ -45,13 +53,11 @@ class _RegisterPageState extends State<RegisterPage> {
   /// to store a new User on device and state => user
   submitFormAction(context) async {
     if (_loginFormKey.currentState.validate()) {
-      setState(() {
-        _loading = true;
-      });
+      setState(() => _loading = true);
       final _registerResult = await api(context).register(
         name: _nameController.text,
         age: int.tryParse(_ageController.text),
-        gender: 'F',
+        gender: _currentRadioValue,
         items: '',
       );
       if (_registerResult != null) {
@@ -65,10 +71,39 @@ class _RegisterPageState extends State<RegisterPage> {
         await Navigator.of(context)
             .pushReplacementNamed(MainGamePage.routeName);
       }
-      setState(() {
-        _loading = false;
-      });
+      setState(() => _loading = false);
     }
+  }
+
+  ///Used to update [gender] value on screen
+  ///defaults to [M]
+  onRadioValueChange(value) => setState(() => _currentRadioValue = value);
+
+  //TODO : move to body on scaffold
+  Row _genderSelect() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        Column(
+          children: <Widget>[
+            Text('MENINO', style: TextStyle(fontSize: 16.0)),
+            Radio(
+                value: 'M',
+                onChanged: onRadioValueChange,
+                groupValue: _currentRadioValue),
+          ],
+        ),
+        Column(
+          children: <Widget>[
+            Text('MENINA', style: TextStyle(fontSize: 16.0)),
+            Radio(
+                value: 'V',
+                groupValue: _currentRadioValue,
+                onChanged: onRadioValueChange),
+          ],
+        ),
+      ],
+    );
   }
 
   @override
@@ -78,14 +113,14 @@ class _RegisterPageState extends State<RegisterPage> {
           label: lz(context).register,
           onPressed: () => submitFormAction(context)),
       appBar: AppBar(title: Text(lz(context).registerPageBarTitle)),
-      body: Padding(
-        padding:
-            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-        child: Form(
-          key: _loginFormKey,
-          child: _loading
-              ? Loading()
-              : SingleChildScrollView(
+      body: Form(
+        key: _loginFormKey,
+        child: _loading
+            ? Loading()
+            : SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
                   child: Container(
                     child: Column(
                       children: <Widget>[
@@ -123,15 +158,17 @@ class _RegisterPageState extends State<RegisterPage> {
                                       : null,
                                   hint: lz(context).ageFormHint,
                                 ),
+                                _genderSelect(),
                               ],
                             ),
                           ),
-                        )
+                        ),
+                        SizedBox(height: 100)
                       ],
                     ),
                   ),
                 ),
-        ),
+              ),
       ),
     );
   }
