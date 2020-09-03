@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:resident_zombies/model/user.dart';
 import 'package:resident_zombies/pages/survivor_items_page.dart';
 import 'package:resident_zombies/theme/global_theme.dart';
 import 'package:resident_zombies/widgets/loading_widget.dart';
@@ -21,6 +22,10 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
   final _actionTextStyle =
       TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white);
   final _defaultItensGap = 15.0;
+
+  ///Store retrivied user data from server
+  ///use [User.fromJson] factory to populate data
+  User _currentUser;
 
   /// Actions buttons values
   ///
@@ -53,10 +58,13 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
           future: api(context).getSurvivor(routeArgs),
           builder: (BuildContext context, snapshot) {
             if (snapshot.hasData) {
-              dynamic _profileData = snapshot.data;
-              _playerProfile =
-                  _profileData['id'] == state(context).user.value.id;
-              print(_profileData['id']);
+              _currentUser = User.fromJson(snapshot.data);
+              print('**currentUser**');
+              _currentUser.toString();
+
+              /// Determine currentPlayer profile or not
+              _playerProfile = _currentUser.id == state(context).user.value.id;
+
               return Column(
                 children: <Widget>[
                   SizedBox(height: _defaultItensGap),
@@ -68,13 +76,12 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                       child: Image.asset('assets/zombie_002.png',
                           fit: BoxFit.fill)),
                   SizedBox(height: _defaultItensGap),
-                  Text(_profileData['name'] ?? lz(context).profileUnknowValue,
-                      style: _nameStyle),
+                  Text(_currentUser.name, style: _nameStyle),
 
                   /// you know when u are seeing your profile
                   /// add an (you) above name
                   ///TODO:MOVE YOU TO LOCALIZATIONS
-                  _profileData['id'] == state(context).user.value.id
+                  _playerProfile
                       ? Text(
                           '(você)',
                           style: _nameStyle.copyWith(
@@ -94,10 +101,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                             children: <Widget>[
                               Text(lz(context).profileGender,
                                   style: _labelStyle),
-                              Text(
-                                  _profileData['gender'] ??
-                                      lz(context).profileUnknowValue,
-                                  style: _valueStyle),
+                              Text(_currentUser.gender, style: _valueStyle),
                             ]),
                       ),
                       Expanded(
@@ -105,9 +109,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               Text(lz(context).profileAge, style: _labelStyle),
-                              Text(
-                                  _profileData['age'].toString() ??
-                                      lz(context).profileUnknowValue,
+                              Text(_currentUser.age.toString(),
                                   style: _valueStyle),
                             ]),
                       ),
@@ -118,7 +120,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                               Text(lz(context).profileStatusTitle,
                                   style: _labelStyle),
                               Text(
-                                  _profileData['infected']
+                                  _currentUser.infected
                                       ? lz(context).profileStatusYes
                                       : lz(context).profileStatusNo,
                                   style: _valueStyle)
