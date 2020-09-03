@@ -11,6 +11,13 @@ class SurvivorItemsPage extends StatefulWidget {
 
 class _SurvivorItemsPageState extends State<SurvivorItemsPage> {
   dynamic routeArgs;
+  final _assetsMap = {
+    'Fiji Water': 'assets/itens/water.png',
+    'First Aid Pouch': 'assets/itens/aid.png',
+    'AK47': 'assets/itens/ak.jpg',
+    'Campbell Soup': 'assets/itens/soup.png',
+  };
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -33,9 +40,10 @@ class _SurvivorItemsPageState extends State<SurvivorItemsPage> {
               return ListView.builder(
                 itemCount: _data.length,
                 itemBuilder: (context, index) => ListTile(
-                  title: Text(_data[index]['item']['name'] +
-                      'X' +
-                      _data[index]['quantity'].toString()),
+                  title: Container(
+                      height: 50,
+                      child: Image.asset(
+                          _assetsMap[_data[index]['item']['name']])),
                   trailing: Column(
                     children: <Widget>[
                       Text('Custo/Und'),
