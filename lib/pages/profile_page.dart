@@ -1,8 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:resident_zombies/model/user.dart';
 import 'package:resident_zombies/pages/main_game_page.dart';
 import 'package:resident_zombies/pages/survivor_items_page.dart';
 import 'package:resident_zombies/theme/global_theme.dart';
+import 'package:resident_zombies/widgets/bottom_sheet_button.dart';
 import 'package:resident_zombies/widgets/loading_widget.dart';
 
 import '../util/helper.dart';
@@ -61,9 +63,27 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
     Navigator.of(context).pushReplacementNamed(MainGamePage.routeName);
   }
 
+  /// Report infection
+  ///
+  /// possible only on other players
+  /// Note: no one runs away screaming I'm infected
+  /// DevNotes: i assume wich 202 response is an ok
+  /// Devnotes: i assume wich 422 error is a problema trying to report 2 times the same people
+  _reportInfection() async {
+    final Response<dynamic> _response = await api(context)
+        .reportInfection(state(context).user.value.id, _currentUser.id);
+    if (_response.statusCode == 202 || _response.statusCode == 200) {
+      print('');
+    } else {
+      print('algun outro porblema não detectado');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomSheet: BottomSheetButton(
+          label: lz(context).register, onPressed: _reportInfection),
       appBar: AppBar(
         title: Text('Perfil'),
       ),
@@ -72,8 +92,6 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
           builder: (BuildContext context, snapshot) {
             if (snapshot.hasData) {
               _currentUser = User.fromJson(snapshot.data);
-              print('**currentUser**');
-              _currentUser.toString();
 
               /// Determine currentPlayer profile or not
               _playerProfile = _currentUser.id == state(context).user.value.id;
