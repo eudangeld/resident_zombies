@@ -2,6 +2,7 @@ import 'dart:core';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:resident_zombies/model/user.dart';
 
 class Api {
   Dio _dio;
@@ -49,7 +50,14 @@ class Api {
   /// [consumerName] Recipient of the transaction full name
   /// [consumerPick] The list of items and quantities WANTED, in the format 'Fiji Water:10;Campbell Soup:5'
   /// [consumerPayment] The list of items and quantities to PAY IN RETURN, in the format 'Fiji Water:5;Campbell Soup:10'
-  Future<void> tradeItem() {}
+  Future<void> tradeItem() {
+    //   wget --no-check-certificate --quiet \
+    // --method POST \
+    // --timeout=0 \
+    // --header '' \
+    // --body-data 'person_id=a922cf1c-12da-48a6-a4ed-fc6a5fd18934&consumer[name]=Dealer&consumer[pick]=First Aid Pouch:2;&consumer[payment]=First Aid Pouch:2;' \
+    //  'http://zssn-backend-example.herokuapp.com/api/people/866ff6d5-5043-4ce0-8b21-9b17edc3ae6a/properties/trade_item'
+  }
 
   ///Returns a list of items belonging to a Person
   /// [GET]
@@ -157,5 +165,19 @@ class Api {
   ///[PATH]
   ///Update survivor
   ///Used to update on survivor
-  Future<void> updateSurvivor() {}
+  Future<dynamic> updateSurvivor(User user) async {
+    Map<dynamic, dynamic> body = {
+      'person': {
+        'name': user.name,
+        'age': user.age,
+        'gender': user.gender,
+        'lonlat':
+            'POINT(${user.lastLocation.latitude} ${user.lastLocation.longitude})',
+      }
+    };
+    final dio = Dio();
+    final _result = await dio.patch(
+        "http://zssn-backend-example.herokuapp.com/api/people/${user.id}");
+    return _result.data;
+  }
 }
