@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:resident_zombies/pages/profile_page.dart';
 import 'package:resident_zombies/util/helper.dart';
+
 import '../widgets/game_drawer.dart';
 import '../widgets/loading_widget.dart';
-import '../model/user.dart';
 
 class MainGamePage extends StatefulWidget {
   static String get routeName => '@routes/main_game_page';
@@ -19,17 +19,6 @@ class _MainGamePageState extends State<MainGamePage> {
 
   void _onMapCreated(GoogleMapController controller) {
     _controller = controller;
-  }
-
-  void _otherPlayoresMarkers(Iterable<User> users) {
-    _markers = Set<Marker>();
-    _markers.addAll(users.map(
-      (f) => Marker(
-        icon: _markerIcon,
-        markerId: MarkerId(f.name),
-        position: LatLng(f.lastLocation.latitude, f.lastLocation.longitude),
-      ),
-    ));
   }
 
   void _userMark() {
