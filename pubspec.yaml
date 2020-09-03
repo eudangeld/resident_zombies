@@ -18,6 +18,7 @@ dependencies:
   shared_preferences: 0.5.7+3
   percent_indicator: 2.1.5
   geolocator: 6.0.0+1
+  rflutter_alert: 1.0.3
 
   dio: 3.0.10
   cupertino_icons: ^0.1.3
