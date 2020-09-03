@@ -8,7 +8,7 @@ class User {
   final String id;
   final int age;
   final String gender;
-  final LatLng lastLocation;
+  LatLng lastLocation;
   final bool infected;
   final String createdAt;
   final String updatedAt;
