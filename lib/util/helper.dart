@@ -44,8 +44,8 @@ LatLng strToCrdinates(String point) {
     return LatLng(0.0, 0.0);
   }
   final _raw = point.replaceAll('POINT (', '').replaceAll(')', '');
-  final _lat = _raw.split(' ')[0];
-  final _lng = _raw.split(' ')[1];
+  final _lat = _raw.split(' ')[1];
+  final _lng = _raw.split(' ')[0];
 
   return LatLng(double.tryParse(_lat), double.tryParse(_lng));
 }

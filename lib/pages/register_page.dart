@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:resident_zombies/model/user.dart';
 import 'package:resident_zombies/pages/main_game_page.dart';
 import 'package:resident_zombies/util/helper.dart';
@@ -19,6 +20,10 @@ class _RegisterPageState extends State<RegisterPage> {
   /// Controllers for input texts
   final _nameController = TextEditingController();
   final _ageController = TextEditingController();
+
+  /// [location] detected by sendor
+  /// Defaults to [codeminerLocation] on state
+  LatLng _registerLocation;
 
   ///when [true] hide current content and shows a circular prog indicator
   /// normally used to process async loginc with server
@@ -46,6 +51,27 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
           textAlign: TextAlign.start);
 
+  /// Geolocator plugin call
+  /// define wich currentUser[location]
+  /// Recovery from exceptions using [deafultLocation] locate on appstate
+  ///
+  /// Knowing throws on [getCurrentPosition]
+  /// Throws a [TimeoutException] when no location is received within the
+  /// supplied [timeLimit] duration.
+  /// Throws a [PermissionDeniedException] when trying to request the device's
+  Future<LatLng> askForLocation() async {
+    _registerLocation = state(context).codeminerLocation;
+    try {
+      final position =
+          await getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      _registerLocation = LatLng(position.latitude, position.longitude);
+      print('Using sensor location');
+    } catch (e) {
+      print('error getting location using codeminer42 sp location');
+    }
+    return _registerLocation;
+  }
+
   /// Form action
   /// Called when register button is called
   ///
@@ -54,20 +80,22 @@ class _RegisterPageState extends State<RegisterPage> {
   submitFormAction(context) async {
     if (_loginFormKey.currentState.validate()) {
       setState(() => _loading = true);
+
       final _registerResult = await api(context).register(
-        name: _nameController.text,
-        age: int.tryParse(_ageController.text),
-        gender: _currentRadioValue,
-        items: '',
-      );
+          name: _nameController.text,
+          age: int.tryParse(_ageController.text),
+          gender: _currentRadioValue,
+          items: '',
+          location: _registerLocation);
+
       if (_registerResult != null) {
         state(context).user.add(await registerUserOnDevice(User(
-              id: _registerResult['id'],
-              name: _registerResult['name'],
-              age: _registerResult['age'],
-              gender: _registerResult['gender'].toString(),
-              infected: _registerResult['infected'],
-            )));
+            id: _registerResult['id'],
+            name: _registerResult['name'],
+            age: _registerResult['age'],
+            gender: _registerResult['gender'].toString(),
+            infected: _registerResult['infected'],
+            lastLocation: _registerLocation)));
         await Navigator.of(context)
             .pushReplacementNamed(MainGamePage.routeName);
       }

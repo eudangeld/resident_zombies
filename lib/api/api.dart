@@ -2,6 +2,7 @@ import 'dart:core';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:resident_zombies/model/user.dart';
 
 class Api {
@@ -128,6 +129,7 @@ class Api {
     @required int age,
     @required String gender,
     @required String items,
+    @required LatLng location,
   }) async {
     //TODO:TREAT REPONSE ERERORS
     Map<dynamic, dynamic> body = {
@@ -136,6 +138,7 @@ class Api {
         'name': name,
         'age': age,
         'gender': gender,
+        'lonlat': 'POINT(${location.longitude} ${location.latitude})',
       }
     };
 
@@ -172,7 +175,7 @@ class Api {
         'age': user.age,
         'gender': user.gender,
         'lonlat':
-            'POINT(${user.lastLocation.latitude} ${user.lastLocation.longitude})',
+            'POINT(${user.lastLocation.longitude} ${user.lastLocation.latitude})',
       }
     };
     final dio = Dio();
