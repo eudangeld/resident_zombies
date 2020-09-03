@@ -177,7 +177,8 @@ class Api {
     };
     final dio = Dio();
     final _result = await dio.patch(
-        "http://zssn-backend-example.herokuapp.com/api/people/${user.id}");
+        "http://zssn-backend-example.herokuapp.com/api/people/${user.id}",
+        data: body);
     return _result.data;
   }
 }
