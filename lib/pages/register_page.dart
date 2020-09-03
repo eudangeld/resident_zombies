@@ -67,7 +67,7 @@ class _RegisterPageState extends State<RegisterPage> {
       _registerLocation = LatLng(position.latitude, position.longitude);
       print('Using sensor location');
     } catch (e) {
-      print('error getting location using codeminer42 sp location');
+      print('error getting location using codeminer42 SP location');
     }
     return _registerLocation;
   }
@@ -81,6 +81,10 @@ class _RegisterPageState extends State<RegisterPage> {
     if (_loginFormKey.currentState.validate()) {
       setState(() => _loading = true);
 
+      // Call location plugin
+      // Stores result on [_registerLocation]
+      await askForLocation();
+
       final _registerResult = await api(context).register(
           name: _nameController.text,
           age: int.tryParse(_ageController.text),
@@ -93,7 +97,7 @@ class _RegisterPageState extends State<RegisterPage> {
             id: _registerResult['id'],
             name: _registerResult['name'],
             age: _registerResult['age'],
-            gender: _registerResult['gender'].toString(),
+            gender: _registerResult['gender'],
             infected: _registerResult['infected'],
             lastLocation: _registerLocation)));
         await Navigator.of(context)
