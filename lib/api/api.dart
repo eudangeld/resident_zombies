@@ -204,7 +204,7 @@ class Api {
     final _result = await dio.patch(
         "http://zssn-backend-example.herokuapp.com/api/people/${user.id}",
         data: body);
-    print(_result.data);
+
     return _result.data;
   }
 
