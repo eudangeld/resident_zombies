@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:resident_zombies/model/trade_item_details.dart';
 import 'package:resident_zombies/util/helper.dart';
 import 'package:resident_zombies/widgets/loading_widget.dart';
+import 'package:resident_zombies/widgets/trade_itens_quantity.dart';
 
 class SurvivorItemsPage extends StatefulWidget {
   static String get routeName => '@routes/survivor_items_page';
@@ -15,16 +17,6 @@ class _SurvivorItemsPageState extends State<SurvivorItemsPage> {
   ///[true] if data is from current player
   /// add specifc styles and logic like no trade with me :(
   bool _playerItens = false;
-
-  /// Used to indicate icons path on assets folder
-  ///
-  /// TODO: Refactory when possible
-  final _assetsMap = {
-    'Fiji Water': 'assets/itens/water.png',
-    'First Aid Pouch': 'assets/itens/aid.png',
-    'AK47': 'assets/itens/ak.png',
-    'Campbell Soup': 'assets/itens/soup.png',
-  };
 
   /// Get [id] from routeArgments and call userData
   ///
@@ -94,8 +86,8 @@ class _SurvivorItemsPageState extends State<SurvivorItemsPage> {
                               leading: Container(
                                   height: 50,
                                   width: 50,
-                                  child: Image.asset(_assetsMap[_data[index]
-                                      ['item']['name']])),
+                                  child: Image.asset(state(context).assetsMap[
+                                      _data[index]['item']['name']])),
                               trailing: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
