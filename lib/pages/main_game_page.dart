@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:resident_zombies/pages/profile_page.dart';
 import 'package:resident_zombies/util/helper.dart';
@@ -40,8 +41,47 @@ class _MainGamePageState extends State<MainGamePage> {
 
   @override
   void didChangeDependencies() {
-    _userMark();
     super.didChangeDependencies();
+    _userMark();
+    getPositionStream(
+            desiredAccuracy: LocationAccuracy.best, distanceFilter: 100)
+        .listen((Position position) {
+      if (position != null) {
+        final _stateUser = state(context).user.value;
+        final _newLocation = LatLng(position.latitude, position.longitude);
+
+        if (_markers != null) {
+          Marker _userMarker = _markers?.firstWhere(
+            (element) => element.markerId.value == _stateUser.name,
+            orElse: () => Marker(markerId: MarkerId('notFound')),
+          );
+          _userMarker = Marker(
+            icon: _markerIcon,
+            infoWindow: InfoWindow(
+              title: _stateUser.name,
+              snippet: 'Ver perfil',
+              onTap: () => Navigator.of(context).pushNamed(
+                  PlayerProfilePage.routeName,
+                  arguments: _stateUser.id),
+            ),
+            markerId: MarkerId(_stateUser.name),
+          );
+
+          if (_userMarker.markerId.value == _stateUser.name) {
+            setState(() {
+              _markers.add(_userMarker);
+            });
+          }
+        }
+
+        state(context).currentMapPosition.add(_newLocation);
+
+        api(context)
+            .updateSurvivor(
+                state(context).user.value..lastLocation = _newLocation)
+            .then((value) => updatePosition(_newLocation));
+      }
+    });
   }
 
   @override
@@ -57,7 +97,7 @@ class _MainGamePageState extends State<MainGamePage> {
                 _markers = Set<Marker>();
                 _markers.addAll(_all.map(
                   (f) => Marker(
-                      onTap: () => print(strToCrdinates(f['lonlat'])),
+                      // onTap: () => print(strToCrdinates(f['lonlat'])),
                       icon: _markerIcon,
                       infoWindow: InfoWindow(
                         title: f['name'],
@@ -83,7 +123,7 @@ class _MainGamePageState extends State<MainGamePage> {
                               target: state(context).user.value.lastLocation ??
                                   LatLng(snapshot.data.latitude,
                                       snapshot.data.longitude),
-                              zoom: 8.0),
+                              zoom: 15.0),
                           onMapCreated: _onMapCreated,
                           markers: _markers,
                         );
@@ -96,13 +136,10 @@ class _MainGamePageState extends State<MainGamePage> {
             }));
   }
 
-  void updatePosition() {
+  void updatePosition(LatLng newPosition) {
     if (_controller != null) {
-      final _lat = state(context).currentMapPosition.value.latitude;
-      final _lng = state(context).currentMapPosition.value.latitude;
-
       _controller.animateCamera(CameraUpdate.newCameraPosition(
-          CameraPosition(tilt: 30.0, zoom: 15.0, target: LatLng(_lat, _lng))));
+          CameraPosition(tilt: 30.0, zoom: 15.0, target: newPosition)));
     }
   }
 }
