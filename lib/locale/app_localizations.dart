@@ -56,6 +56,13 @@ class AppLocalizations {
   String get drawerItens => 'Meus itens';
   String get drawerFriends => 'Amigos';
   String get drawerAllPlayers => 'Todos os jogadores';
+
+  ///Survivor itens page
+  ///
+  ///
+  String get itensTitle => 'Ítens disponíveis';
+  String get intensSubtitle =>
+      'Você pode trocar ítens com outros jogadores, coloque os ítens no carrinho, selecione os ítens que você vai usar na troca e seja feliz. \nPS: Não aceitamos trocas ou parcelamentos. ';
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
