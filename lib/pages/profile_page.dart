@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:resident_zombies/model/user.dart';
+import 'package:resident_zombies/pages/main_game_page.dart';
 import 'package:resident_zombies/pages/survivor_items_page.dart';
 import 'package:resident_zombies/theme/global_theme.dart';
 import 'package:resident_zombies/widgets/loading_widget.dart';
@@ -13,6 +14,9 @@ class PlayerProfilePage extends StatefulWidget {
 }
 
 class _PlayerProfilePageState extends State<PlayerProfilePage> {
+  /// Received from [navigator.argments]
+  /// used to get from server
+  /// if is null use state user
   dynamic routeArgs;
 
   //TODO: move styles to theme and rename it
@@ -46,6 +50,15 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
     super.didChangeDependencies();
     routeArgs = ModalRoute.of(context).settings.arguments ??
         state(context).user.value.id;
+  }
+
+  ///See on map button Action
+  ///
+  ///add currentLatlng on state [currentMapPosition]
+  ///and push route
+  _seeOnMapAction() {
+    state(context).currentMapPosition.add(_currentUser.lastLocation);
+    Navigator.of(context).pushReplacementNamed(MainGamePage.routeName);
   }
 
   @override
@@ -175,17 +188,16 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                       SizedBox(width: 20),
                       Expanded(
                         child: ConstrainedBox(
-                          constraints:
-                              BoxConstraints(minHeight: _minButtonHeight),
-                          child: MaterialButton(
-                              padding: EdgeInsets.all(10),
-                              color: heavyDark,
-                              elevation: _defaultElevationValues,
-                              child: Text('Ver no mapa',
-                                  style: _actionTextStyle,
-                                  textAlign: TextAlign.center),
-                              onPressed: () => print('vamos lá')),
-                        ),
+                            constraints:
+                                BoxConstraints(minHeight: _minButtonHeight),
+                            child: MaterialButton(
+                                padding: EdgeInsets.all(10),
+                                color: heavyDark,
+                                elevation: _defaultElevationValues,
+                                child: Text('Ver no mapa',
+                                    style: _actionTextStyle,
+                                    textAlign: TextAlign.center),
+                                onPressed: _seeOnMapAction)),
                       ),
                     ]),
                   ),
