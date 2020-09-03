@@ -18,15 +18,38 @@ class TradeDetailsPage extends StatelessWidget {
         appBar: AppBar(
           title: Text('Detalhes da troca'),
         ),
-        body: Column(children: <Widget>[
-          /// Survivor itens
-          ///
-          itenDetailsWidget(context, state(context).traderId),
+        body: SingleChildScrollView(
+          child: Column(children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top: 20, bottom: 30),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: List.filled(5,
+                      Icon(Icons.arrow_back, size: 40, color: Colors.green))),
+            ),
 
-          /// Player itens
-          ///
-          itenDetailsWidget(context, state(context).user.value.id),
-        ]));
+            /// Survivor itens
+            ///
+            ///
+            itenDetailsWidget(context, state(context).traderId),
+
+            Padding(padding: const EdgeInsets.all(20.0), child: Divider()),
+
+            Padding(
+              padding: const EdgeInsets.only(top: 20, bottom: 30),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: List.filled(5,
+                      Icon(Icons.arrow_forward, size: 40, color: Colors.red))),
+            ),
+
+            /// Player itens
+            ///
+            itenDetailsWidget(context, state(context).user.value.id),
+
+            SizedBox(height: 120)
+          ]),
+        ));
   }
 
   /// Show current player itens
@@ -61,34 +84,14 @@ class TradeDetailsPage extends StatelessWidget {
                 : Column(
                     children: _data
                         .map((item) => ItensStepper(
-                            iconPath: 'assets/itens/water.png',
+                            iconPath: item['item']['name'],
                             currentItem: ItemDetail(
                                 points: item['item']['points'],
                                 name: item['item']['name'],
-                                maxAvaliables: 10,
+                                maxAvaliables: item['quantity'],
                                 units: 0)))
                         .toList(),
                   );
-            Column(
-              children: <Widget>[
-                ItensStepper(
-                    iconPath: 'assets/itens/water.png',
-                    currentItem: ItemDetail(
-                        name: 'Fijy water', maxAvaliables: 10, units: 0)),
-                ItensStepper(
-                    iconPath: 'assets/itens/aid.png',
-                    currentItem: ItemDetail(
-                        name: 'First Aid Pouch', maxAvaliables: 10, units: 0)),
-                ItensStepper(
-                    iconPath: 'assets/itens/ak.png',
-                    currentItem:
-                        ItemDetail(name: 'Ak 47', maxAvaliables: 10, units: 0)),
-                ItensStepper(
-                    iconPath: 'assets/itens/soup.png',
-                    currentItem: ItemDetail(
-                        name: 'Campbell Soup', maxAvaliables: 10, units: 0)),
-              ],
-            );
           }),
     );
   }
