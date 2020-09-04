@@ -4,7 +4,10 @@ import 'dart:core';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:resident_zombies/model/trade_item_details.dart';
+import 'package:resident_zombies/model/trade_options.dart';
 import 'package:resident_zombies/model/user.dart';
+import 'package:resident_zombies/widgets/trade_itens_quantity.dart';
 
 class Api {
   Dio _dio;
@@ -52,13 +55,44 @@ class Api {
   /// [consumerName] Recipient of the transaction full name
   /// [consumerPick] The list of items and quantities WANTED, in the format 'Fiji Water:10;Campbell Soup:5'
   /// [consumerPayment] The list of items and quantities to PAY IN RETURN, in the format 'Fiji Water:5;Campbell Soup:10'
-  Future<void> tradeItem() {
-    //   wget --no-check-certificate --quiet \
-    // --method POST \
-    // --timeout=0 \
-    // --header '' \
-    // --body-data 'person_id=a922cf1c-12da-48a6-a4ed-fc6a5fd18934&consumer[name]=Dealer&consumer[pick]=First Aid Pouch:2;&consumer[payment]=First Aid Pouch:2;' \
-    //  'http://zssn-backend-example.herokuapp.com/api/people/866ff6d5-5043-4ce0-8b21-9b17edc3ae6a/properties/trade_item'
+  Future<dynamic> tradeItem(Tradeoptions options) async {
+    final sendingQuery = options.sendingItens
+        .map((e) => e.currentItem)
+        .toList()
+        .map((e) => e.name + ':' + e.units.toString())
+        .join(';');
+
+    final receiveQuery = options.wantedItens
+        .map((e) => e.currentItem)
+        .toList()
+        .map((e) => e.name + ':' + e.units.toString())
+        .join(';');
+
+    Map<dynamic, dynamic> body = {
+      'person_id': options.survivorUUID,
+      'consumer': {
+        'name': options.player.name,
+        'pick': receiveQuery,
+        'payment': sendingQuery,
+      }
+    };
+
+    final dio = Dio();
+    Response _response;
+
+    try {
+      final _result = _response = await dio.post(
+          'http://zssn-backend-example.herokuapp.com/api/people/${options.survivorUUID}/properties/trade_item',
+          data: body);
+    } on DioError catch (error) {
+      _response = error.response;
+    }
+
+    print(_response.request);
+    print(_response.statusCode);
+    print(_response.statusMessage);
+
+    return _response;
   }
 
   ///Returns a list of items belonging to a Person
