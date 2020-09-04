@@ -203,9 +203,15 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                               child: Text(lz(context).profileSeeitens,
                                   style: _actionTextStyle,
                                   textAlign: TextAlign.center),
-                              onPressed: () => Navigator.of(context).pushNamed(
-                                  SurvivorItemsPage.routeName,
-                                  arguments: routeArgs)),
+                              onPressed: () {
+                                if (user(context).infected) {
+                                  infectedAlert(context);
+                                } else {
+                                  Navigator.of(context).pushNamed(
+                                      SurvivorItemsPage.routeName,
+                                      arguments: routeArgs);
+                                }
+                              }),
                         ),
                       ),
                       SizedBox(width: 20),

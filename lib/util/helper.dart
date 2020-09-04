@@ -36,6 +36,7 @@ Future<User> registerUserOnDevice(User user) async {
   await prefs.setString('name', user.name);
   await prefs.setString('gender', user.gender.toString());
   await prefs.setInt('age', user.age);
+  await prefs.setBool('infected', user.infected);
   await prefs.setDouble('lat', user.lastLocation?.latitude ?? 0.0);
   await prefs.setDouble('lng', user.lastLocation?.longitude ?? 0.0);
   user.toString();
@@ -100,6 +101,7 @@ Future<User> userFromStorage() async {
         name: prefs.getString('name'),
         id: prefs.getString('id'),
         gender: prefs.getString('gender'),
+        infected: prefs.getBool('infected'),
         lastLocation: LatLng(
           prefs.getDouble('lat'),
           prefs.getDouble('lng'),
