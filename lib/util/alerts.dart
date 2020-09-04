@@ -81,3 +81,35 @@ reportOurselfAlert(BuildContext context) {
     ],
   ).show();
 }
+
+/// Show alert before call trade option
+/// offer to user the option to cancel transaction
+///
+confirmTradeAlert(BuildContext context, Function confirmAction) {
+  Alert(
+    context: context,
+    type: AlertType.warning,
+    title: 'Tem certeza ?',
+    desc:
+        'Pensa bem aí, essa é uma operação que não pode ser desfeita. Um erro aqui pode sgnificar ser infectado mais tarde.',
+    buttons: [
+      DialogButton(
+        child: Text("CONFRIMAR",
+            style: TextStyle(color: Colors.white, fontSize: 16)),
+        onPressed: () {
+          Navigator.pop(context);
+          confirmAction();
+        },
+        width: 120,
+      ),
+      DialogButton(
+        child:
+            Text("VOLTAR", style: TextStyle(color: Colors.white, fontSize: 16)),
+        onPressed: () async {
+          Navigator.pop(context);
+        },
+        width: 120,
+      ),
+    ],
+  ).show();
+}
