@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:resident_zombies/model/trade_item_details.dart';
 import 'package:resident_zombies/model/trade_options.dart';
+import 'package:resident_zombies/pages/trade_result_page.dart';
 import 'package:resident_zombies/util/alerts.dart';
 import 'package:resident_zombies/util/helper.dart';
 import 'package:resident_zombies/widgets/bottom_sheet_button.dart';
@@ -54,7 +55,8 @@ class TradeDetailsPage extends StatelessWidget {
                     wantedItens: _traderList,
                     survivorUUID: state(context).traderId))
                 .then((value) {
-              print(value);
+              Navigator.of(context)
+                  .pushNamed(TradeResultPage.routeName, arguments: value);
             }));
   }
 
