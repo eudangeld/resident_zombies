@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:resident_zombies/model/trade_item_details.dart';
+import 'package:resident_zombies/model/trade_options.dart';
+import 'package:resident_zombies/util/alerts.dart';
 import 'package:resident_zombies/util/helper.dart';
 import 'package:resident_zombies/widgets/bottom_sheet_button.dart';
 import 'package:resident_zombies/widgets/loading_widget.dart';
@@ -16,12 +18,53 @@ class TradeDetailsPage extends StatelessWidget {
   // ignore: close_sinks
   final _paymentTotalPoints = BehaviorSubject<int>.seeded(0);
 
+  ///playerItens used to create query string on api trade call
+  ///
+  ///
+  List<ItensStepper> _playerSteppers;
+
+  ///trader itens stepper used to create query string on api trade call
+  ///
+  ///
+  List<ItensStepper> _traderSteppers;
+
+  makeTrade(BuildContext context) {
+    /// create trader itens List
+    /// send only itens with units > 0
+    final _traderList = _traderSteppers
+        .where((element) => element.currentItem.units > 0)
+        .toList(); // LOL
+
+    /// create player itens List
+    ////// send only itens with units > 0
+    final _playerList = _playerSteppers
+        .where((element) => element.currentItem.units > 0)
+        .toList();
+
+    /// Show an alert to user
+    /// if accept than call api trade
+    /// Send data using [TradeOptions] class
+    ///
+    confirmTradeAlert(
+        context,
+        () => api(context)
+                .tradeItem(Tradeoptions(
+                    player: state(context).user.value,
+                    sendingItens: _playerList,
+                    wantedItens: _traderList,
+                    survivorUUID: state(context).traderId))
+                .then((value) {
+              print(value);
+            }));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        bottomSheet: BottomSheetButton(
-          label: 'Continuar',
-          onPressed: () => print('adicionando item na sacola'),
+        bottomSheet: AdvanceTRadeButton(
+          playerTotal: _paymentTotalPoints,
+          requiredTotal: _requiredItensTotalPoints,
+          onTap: () => makeTrade(context),
         ),
         appBar: AppBar(
           title: Text('Detalhes da troca'),
@@ -94,9 +137,8 @@ class TradeDetailsPage extends StatelessWidget {
               );
             }
             final _steppers = _data.map((item) {
-              final BehaviorSubject<int> _bhsv = BehaviorSubject<int>.seeded(0);
               return ItensStepper(
-                  streamTotal: _bhsv,
+                  streamTotal: BehaviorSubject<int>.seeded(0),
                   iconPath: item['item']['name'],
                   baseColor: _playerItens ? Colors.red : Colors.green,
                   currentItem: ItemDetail(
@@ -105,6 +147,12 @@ class TradeDetailsPage extends StatelessWidget {
                       maxAvaliables: item['quantity'],
                       units: 0));
             }).toList();
+
+            /// put steppers on top level array
+            /// to build query string when advance
+            _playerItens
+                ? _playerSteppers = _steppers
+                : _traderSteppers = _steppers;
 
             return Column(
                 children: []
@@ -125,23 +173,58 @@ class TradeDetailsPage extends StatelessWidget {
 /// [required] represents total points needed
 /// [playerTotal] represent player points offered to make this trade
 
-class AdvanceTRadeButton extends StatelessWidget {
-  final int requiredTotal;
-  final int playerTotal;
+class AdvanceTRadeButton extends StatefulWidget {
+  final BehaviorSubject<int> requiredTotal;
+  final BehaviorSubject<int> playerTotal;
+  final Function onTap;
 
   const AdvanceTRadeButton({
     Key key,
     this.requiredTotal,
     this.playerTotal,
+    this.onTap,
   }) : super(key: key);
 
-  bool get checkValuesBalance => playerTotal >= requiredTotal;
+  @override
+  _AdvanceTRadeButtonState createState() => _AdvanceTRadeButtonState();
+}
+
+class _AdvanceTRadeButtonState extends State<AdvanceTRadeButton> {
+  @override
+  void initState() {
+    super.initState();
+    widget.playerTotal.listen(updateHandler);
+    widget.requiredTotal.listen(updateHandler);
+  }
+
+  String possibleLabel = 'Trocar';
+  String notPossibleLabel = 'Não vai rolar';
+  String currentLabel = '';
+
+  updateHandler(int updateValue) {
+    setState(() {
+      currentLabel = notPossibleLabel;
+      if (checkValuesBalance) {
+        currentLabel = possibleLabel;
+      }
+    });
+  }
+
+  ///if [true] trade user ca trade itens
+  ///
+  bool get checkValuesBalance {
+    return widget.playerTotal.value == widget.requiredTotal.value &&
+        widget.requiredTotal.value > 0;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BottomSheetButton(
-      label: checkValuesBalance ? 'Continuar' : 'Não vai rolar',
-      onPressed: () => print('adicionando item na sacola'),
+    return Opacity(
+      opacity: checkValuesBalance ? 1.0 : 0.5,
+      child: BottomSheetButton(
+        label: currentLabel,
+        onPressed: checkValuesBalance ? widget.onTap : null,
+      ),
     );
   }
 }
@@ -173,7 +256,7 @@ class _TotalPOintsIndicatorState extends State<TotalPOintsIndicator> {
         total = 0;
         widget.steppers.forEach((e) {
           setState(() => total += e.streamTotal.value);
-          total.toStringAsFixed(total);
+          widget.total.add(total);
         });
       });
     });
