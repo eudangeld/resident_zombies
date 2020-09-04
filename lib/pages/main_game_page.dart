@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:resident_zombies/model/user.dart';
 import 'package:resident_zombies/pages/profile_page.dart';
 import 'package:resident_zombies/util/helper.dart';
 
@@ -16,6 +17,7 @@ class MainGamePage extends StatefulWidget {
 class _MainGamePageState extends State<MainGamePage> {
   GoogleMapController _controller;
   BitmapDescriptor _markerIcon;
+  BitmapDescriptor _playerIcon;
   Set<Marker> _markers = Set<Marker>();
 
   void _onMapCreated(GoogleMapController controller) {
@@ -33,6 +35,17 @@ class _MainGamePageState extends State<MainGamePage> {
     }
   }
 
+  void _playerMark() {
+    if (_playerIcon == null) {
+      BitmapDescriptor.fromAssetImage(
+              createLocalImageConfiguration(context,
+                  size: Size(MediaQuery.of(context).size.width * 01,
+                      MediaQuery.of(context).size.width * 01)),
+              'assets/me_icon.png')
+          .then(((value) => setState(() => _playerIcon = value)));
+    }
+  }
+
   void _updateMarker(BitmapDescriptor bitmap) {
     setState(() {
       _markerIcon = bitmap;
@@ -43,6 +56,7 @@ class _MainGamePageState extends State<MainGamePage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _userMark();
+    _playerMark();
     getPositionStream(
             desiredAccuracy: LocationAccuracy.best, distanceFilter: 100)
         .listen((Position position) {
@@ -56,7 +70,7 @@ class _MainGamePageState extends State<MainGamePage> {
             orElse: () => Marker(markerId: MarkerId('notFound')),
           );
           _userMarker = Marker(
-            icon: _markerIcon,
+            icon: _playerIcon,
             infoWindow: InfoWindow(
               title: _stateUser.name,
               snippet: 'Ver perfil',
@@ -87,7 +101,9 @@ class _MainGamePageState extends State<MainGamePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          title: Text('Mundo - TRZ', style: TextStyle(color: Colors.white)),
+        ),
         drawer: Drawer(child: GameDrawer()),
         body: FutureBuilder(
             future: api(context).getAll(),
@@ -115,17 +131,33 @@ class _MainGamePageState extends State<MainGamePage> {
                     builder:
                         (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
                       if (snapshot.hasData) {
-                        return GoogleMap(
-                          myLocationButtonEnabled: true,
-                          zoomControlsEnabled: true,
-                          mapType: MapType.normal,
-                          initialCameraPosition: CameraPosition(
-                              target: state(context).user.value.lastLocation ??
-                                  LatLng(snapshot.data.latitude,
-                                      snapshot.data.longitude),
-                              zoom: 15.0),
-                          onMapCreated: _onMapCreated,
-                          markers: _markers,
+                        updatePosition(snapshot.data);
+                        return Stack(
+                          children: [
+                            GoogleMap(
+                              myLocationButtonEnabled: true,
+                              zoomControlsEnabled: true,
+                              mapType: MapType.normal,
+                              initialCameraPosition: CameraPosition(
+                                  target:
+                                      state(context).user.value.lastLocation ??
+                                          LatLng(snapshot.data.latitude,
+                                              snapshot.data.longitude),
+                                  zoom: 15.0),
+                              onMapCreated: _onMapCreated,
+                              markers: _markers,
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Container(
+                                    height: 205,
+                                    child: AllPLayersMarker(
+                                      players: _all,
+                                    )),
+                              ],
+                            ),
+                          ],
                         );
                       }
                       return Loading();
@@ -141,5 +173,71 @@ class _MainGamePageState extends State<MainGamePage> {
       _controller.animateCamera(CameraUpdate.newCameraPosition(
           CameraPosition(tilt: 30.0, zoom: 15.0, target: newPosition)));
     }
+  }
+}
+
+//// This class render all player on a pageview
+///
+///when user changed the page the current postion on map is updated
+///
+///
+class AllPLayersMarker extends StatefulWidget {
+  const AllPLayersMarker({Key key, this.players}) : super(key: key);
+
+  @override
+  _AllPLayersMarkerState createState() => _AllPLayersMarkerState();
+
+  final List<dynamic> players;
+}
+
+class _AllPLayersMarkerState extends State<AllPLayersMarker> {
+  final _controller = PageController(viewportFraction: 0.8);
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _controller.addListener(onScrollChange);
+  }
+
+  void onScrollChange() {
+    final int _currentIndex = _controller.page.round().toInt();
+    final _usr = User.fromJson(widget.players[_currentIndex]);
+    state(context).currentMapPosition.add(_usr.lastLocation);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PageView.builder(
+      itemCount: widget.players.length,
+      controller: _controller,
+      scrollDirection: Axis.horizontal,
+      itemBuilder: (context, index) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: PhysicalModel(
+          borderRadius: BorderRadius.circular(10),
+          clipBehavior: Clip.antiAlias,
+          child: Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: Container(
+                    child: Image.asset(
+                        getIdFromLocation(widget.players[index]['location']) ==
+                                user(context).id
+                            ? 'assets/male_player.png'
+                            : 'assets/zombie_002.png'),
+                    constraints: BoxConstraints(maxHeight: 120),
+                  ),
+                ),
+                Expanded(child: Text(widget.players[index]['name'])),
+              ],
+            ),
+          ),
+          color: Colors.white,
+        ),
+      ),
+    );
   }
 }

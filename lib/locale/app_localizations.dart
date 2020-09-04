@@ -52,7 +52,7 @@ class AppLocalizations {
   ///
   ///
   String get drawerProfile => 'Perfil';
-  String get drawereMap => 'Mapa';
+  String get drawereMap => 'Ver mapa';
   String get drawerItens => 'Meus itens';
   String get drawerFriends => 'Amigos';
   String get drawerAllPlayers => 'Todos os jogadores';

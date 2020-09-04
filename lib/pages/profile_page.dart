@@ -122,7 +122,10 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(70),
                           border: Border.all(color: Colors.white, width: 10.0)),
-                      child: Image.asset('assets/zombie_002.png',
+                      child: Image.asset(
+                          _playerProfile
+                              ? reselvePlyerAsset(context)
+                              : 'assets/zombie_002.png',
                           fit: BoxFit.fill)),
                   SizedBox(height: _defaultItensGap),
                   Text(_currentUser.name, style: _nameStyle),
@@ -220,9 +223,14 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
                                       textAlign: TextAlign.center,
                                     ),
                                     onPressed: () {
-                                      state(context).traderId = _currentUser.id;
-                                      Navigator.of(context).pushNamed(
-                                          TradeDetailsPage.routeName);
+                                      if (user(context).infected) {
+                                        infectedAlert(context);
+                                      } else {
+                                        state(context).traderId =
+                                            _currentUser.id;
+                                        Navigator.of(context).pushNamed(
+                                            TradeDetailsPage.routeName);
+                                      }
                                     }),
                               ),
                             )

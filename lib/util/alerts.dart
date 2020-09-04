@@ -155,3 +155,24 @@ registerUnknowError(BuildContext context) {
     ],
   ).show();
 }
+
+/// Showed an infected user try do something
+///
+///
+infectedAlert(BuildContext context) {
+  Alert(
+    context: context,
+    type: AlertType.warning,
+    title: 'Infectado!',
+    desc:
+        'Você ta infectado e não pode entrar aqui. Grita por socorro, vai qua alguém ouve você.',
+    buttons: [
+      DialogButton(
+        child: Text("BUUUUUU!",
+            style: TextStyle(color: Colors.white, fontSize: 16)),
+        onPressed: () => Navigator.pop(context),
+        width: 120,
+      ),
+    ],
+  ).show();
+}

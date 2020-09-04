@@ -33,6 +33,9 @@ flutter:
   assets:
     - assets/zombie_001.png
     - assets/zombie_002.png
+    - assets/male_player.png
+    - assets/female_player.png
+    - assets/me_icon.png
     - assets/trade_success.png
     - assets/trade_fail.png
     - assets/player_map_icon.png

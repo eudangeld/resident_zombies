@@ -13,6 +13,12 @@ AppLocalizations lz(BuildContext context) => AppLocalizations.of(context);
 /// Api shortcut
 Api api(BuildContext context) => Provider.of<Api>(context, listen: false);
 
+/// User shortcut
+/// retuen last value from user
+///
+/// Note: this method return the value not the stream fro user
+User user(BuildContext context) => state(context).user.value;
+
 String getIdFromLocation(String location) =>
     location.substring(location.lastIndexOf('/') + 1);
 
@@ -68,6 +74,16 @@ Future<String> getIdFromDevice() async {
   final prefs = await localStorage();
 
   return prefs.getString('id');
+}
+
+/// An utilyti too to bring correct icon player
+/// female or male player based on user preferences
+String reselvePlyerAsset(BuildContext context) {
+  final _gender = state(context).user.value.gender;
+  if (_gender != 'M') {
+    return 'assets/female_player.png';
+  }
+  return 'assets/male_player.png';
 }
 
 /// Create an [User] on state
