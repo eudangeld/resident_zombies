@@ -10,6 +10,7 @@ import 'package:resident_zombies/theme/global_theme.dart';
 import 'api/api.dart';
 import 'locale/app_localizations.dart';
 import 'model/routes.dart';
+import 'model/user.dart';
 import 'pages/not_found.dart';
 import 'util/helper.dart';
 import 'widgets/loading_widget.dart';
@@ -68,12 +69,16 @@ class _AppState extends State<App> {
     _state.user.add(await userFromStorage());
     _state.currentMapPosition.add(_state.user.value.lastLocation);
     if (_initialRoute == MainGamePage.routeName) {
-      print('check user on server');
+      print('check and referesh user');
       final _userResetedorDeleted =
           await _api.getSurvivor(_state.user.value.id);
       if (_userResetedorDeleted.statusCode > 200) {
         print('this user has been deleted or server was reseted.');
         _initialRoute = RegisterPage.routeName;
+      } else {
+        final _startUser = User.fromJson(_userResetedorDeleted.data);
+        _state.user.add(_startUser);
+        await registerUserOnDevice(_startUser);
       }
     }
 
