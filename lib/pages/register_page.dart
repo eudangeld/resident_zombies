@@ -1,11 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:resident_zombies/model/user.dart';
 import 'package:resident_zombies/pages/main_game_page.dart';
+import 'package:resident_zombies/util/alerts.dart';
 import 'package:resident_zombies/util/helper.dart';
-import 'package:resident_zombies/widgets/bottom_sheet_button.dart';
+import 'package:resident_zombies/widgets/button.dart';
 import 'package:resident_zombies/widgets/loading_widget.dart';
-import 'package:geolocator/geolocator.dart';
 
 class RegisterPage extends StatefulWidget {
   static String get routeName => '@routes/register_page';
@@ -65,7 +68,6 @@ class _RegisterPageState extends State<RegisterPage> {
       final position =
           await getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
       _registerLocation = LatLng(position.latitude, position.longitude);
-      print('Using sensor location');
     } catch (e) {
       print('error getting location using codeminer42 SP location');
     }
@@ -97,14 +99,19 @@ class _RegisterPageState extends State<RegisterPage> {
           items: '',
           location: _registerLocation);
 
-      if (_registerResult != null) {
-        state(context)
-            .user
-            .add(await registerUserOnDevice(User.fromJson(_registerResult)));
+      setState(() => _loading = false);
+
+      if (_registerResult.statusCode > 204) {
+        print(_registerResult.statusMessage);
+        _registerResult.data['name'] == null
+            ? registerUnknowError(context)
+            : registerAlertNameHasBeenTakenFail(context);
+      } else {
+        state(context).user.add(
+            await registerUserOnDevice(User.fromJson(_registerResult.data)));
         await Navigator.of(context)
             .pushReplacementNamed(MainGamePage.routeName);
       }
-      setState(() => _loading = false);
     }
   }
 
@@ -142,9 +149,6 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomSheet: BottomSheetButton(
-          label: lz(context).register,
-          onPressed: () => submitFormAction(context)),
       appBar: AppBar(title: Text(lz(context).registerPageBarTitle)),
       body: Form(
         key: _loginFormKey,
@@ -158,10 +162,14 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: Column(
                       children: <Widget>[
                         Padding(
-                          padding: EdgeInsets.all(30),
+                          padding:
+                              EdgeInsets.only(top: 70, left: 20, right: 20),
                           child: Container(
-                              width: MediaQuery.of(context).size.width * .3,
-                              child: Image.asset('assets/zombie_002.png')),
+                              child: Text('The Resident Zombie',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: 22))),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(12.0),
@@ -196,7 +204,13 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 100)
+                        Padding(
+                          padding: EdgeInsets.all(30),
+                          child: Button(
+                              padding: EdgeInsets.all(20),
+                              onPressed: () => submitFormAction(context),
+                              label: lz(context).register),
+                        ),
                       ],
                     ),
                   ),

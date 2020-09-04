@@ -7,5 +7,5 @@ LinearGradient zombieGradient = LinearGradient(
   begin: Alignment.topCenter,
   end: Alignment.bottomCenter,
   stops: [0.1, 0.5, 0.9],
-  colors: [Colors.lightGreen, Colors.green, Colors.greenAccent],
+  colors: [Color(0xff3a556a), Color(0xcc3a556a), Color(0xff3a556a)],
 );

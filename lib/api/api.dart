@@ -1,50 +1,12 @@
-import 'dart:convert';
 import 'dart:core';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:resident_zombies/model/trade_item_details.dart';
 import 'package:resident_zombies/model/trade_options.dart';
 import 'package:resident_zombies/model/user.dart';
-import 'package:resident_zombies/widgets/trade_itens_quantity.dart';
 
 class Api {
-  Dio _dio;
-  Api() {
-    _dio = Dio(
-      BaseOptions(
-        baseUrl: baseUrl,
-        contentType: Headers.formUrlEncodedContentType,
-      ),
-    );
-    // _dio.options.contentType = Headers.formUrlEncodedContentType;
-    _dio.interceptors
-        .add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
-      print('ON REQUEST');
-      print(options.uri);
-      print(options.data);
-      print(options.headers);
-      print(options.extra);
-      print(options.method);
-      return options;
-    }, onResponse: (Response response) async {
-      print('ON RESPONSE');
-      print(response.data);
-      print(response.statusMessage);
-      print(response.statusCode);
-      print(response.extra);
-      return response;
-    }, onError: (DioError e) async {
-      print('ON ERROR');
-
-      print(e.error);
-      print(e.request);
-      print(e.message);
-      return e;
-    }));
-  }
-
   /// TODO: come from a .env file
   /// Use if u need to acces outside of this class
   static final String baseUrl = 'http://zssn-backend-example.herokuapp.com';
@@ -87,10 +49,6 @@ class Api {
     } on DioError catch (error) {
       _response = error.response;
     }
-
-    print(_response.request);
-    print(_response.statusCode);
-    print(_response.statusMessage);
 
     return _response;
   }
@@ -138,7 +96,10 @@ class Api {
     @required String items,
     @required LatLng location,
   }) async {
-    //TODO:TREAT REPONSE ERERORS
+    Response<dynamic> _response;
+
+    final dio = Dio();
+
     Map<dynamic, dynamic> body = {
       'items': 'Fiji Water:10;Campbell Soup:5;First Aid Pouch:5; AK47:10',
       'person': {
@@ -150,15 +111,15 @@ class Api {
     };
 
     try {
-      final _result = await _dio.post(
+      _response = await dio.post(
           "http://zssn-backend-example.herokuapp.com/api/people",
           data: body,
           options: Options(contentType: Headers.formUrlEncodedContentType));
-      return _result.data;
-    } catch (e) {
-      //TODO :FIND NEW ROADS
-      return null;
+      return _response;
+    } on DioError catch (e) {
+      _response = e.response;
     }
+    return _response;
   }
 
   ///Used to increase the infection count of a Person
@@ -242,6 +203,9 @@ class Api {
     return _result.data;
   }
 
+  /// use to [infect] someone
+  ///
+  /// use all survivor [ids] to report [target]
   Future<dynamic> strafeSomeone(String targetId) async {
     final List<dynamic> _army = await getAll() as List<dynamic>;
 

@@ -16,7 +16,7 @@ reportInfeteddAlertSuccess(BuildContext context) {
     buttons: [
       DialogButton(
         child: Text("Beleza!",
-            style: TextStyle(color: Colors.white, fontSize: 20)),
+            style: TextStyle(color: Colors.white, fontSize: 16)),
         onPressed: () => Navigator.pop(context),
         width: 120,
       )
@@ -34,13 +34,13 @@ reportInfeteddAlertSpam(BuildContext context) {
     buttons: [
       DialogButton(
         child: Text("Entendi",
-            style: TextStyle(color: Colors.white, fontSize: 20)),
+            style: TextStyle(color: Colors.white, fontSize: 16)),
         onPressed: () => Navigator.pop(context),
         width: 120,
       ),
       DialogButton(
         child: Text("Dane-se!",
-            style: TextStyle(color: Colors.white, fontSize: 20)),
+            style: TextStyle(color: Colors.white, fontSize: 16)),
         onPressed: () => Navigator.pop(context),
         width: 120,
       ),
@@ -57,7 +57,7 @@ reportInfeteddAlerError(BuildContext context) {
         'Pro algum motivo nossas equipes não entenderam seu pedido ou você está fora da área de cobertura da S.T.A.R.S, envia um email para eudangeld@gmail.com se achar melhor.',
     buttons: [
       DialogButton(
-        child: Text("Ok", style: TextStyle(color: Colors.white, fontSize: 20)),
+        child: Text("Ok", style: TextStyle(color: Colors.white, fontSize: 16)),
         onPressed: () => Navigator.pop(context),
         width: 120,
       ),
@@ -74,7 +74,7 @@ reportOurselfAlert(BuildContext context) {
     buttons: [
       DialogButton(
         child: Text("ENTENDI",
-            style: TextStyle(color: Colors.white, fontSize: 20)),
+            style: TextStyle(color: Colors.white, fontSize: 16)),
         onPressed: () => Navigator.pop(context),
         width: 120,
       ),
@@ -108,6 +108,48 @@ confirmTradeAlert(BuildContext context, Function confirmAction) {
         onPressed: () async {
           Navigator.pop(context);
         },
+        width: 120,
+      ),
+    ],
+  ).show();
+}
+
+/// Showed when register failed with nams has been taken
+///
+///
+registerAlertNameHasBeenTakenFail(BuildContext context) {
+  Alert(
+    context: context,
+    type: AlertType.warning,
+    title: 'Hora de ser criativo',
+    desc:
+        'É, já existe algum sobrevivente com esse nome aí. Vai tentando, jaja você vai conseguir. Você pode tentar usar algum nome Finlandês por exemplo',
+    buttons: [
+      DialogButton(
+        child:
+            Text("Beleza", style: TextStyle(color: Colors.white, fontSize: 16)),
+        onPressed: () => Navigator.pop(context),
+        width: 120,
+      ),
+    ],
+  ).show();
+}
+
+/// Showed when register fail with an unknow error
+///
+///
+registerUnknowError(BuildContext context) {
+  Alert(
+    context: context,
+    type: AlertType.error,
+    title: 'Xi,temos um problema.',
+    desc:
+        'Houve um problema desconhecido pra se cadastrar você pode tentar novamente mais tarde.',
+    buttons: [
+      DialogButton(
+        child: Text("Que saco!",
+            style: TextStyle(color: Colors.white, fontSize: 16)),
+        onPressed: () => Navigator.pop(context),
         width: 120,
       ),
     ],

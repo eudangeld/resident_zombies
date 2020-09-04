@@ -25,7 +25,7 @@ class AppLocalizations {
   ///
   /// Keep here all string s related to the registerpage here
   String get registerPageBodyTitle =>
-      'Pelo visto você ainda não é um sobrevivente, faça seu cadastro e veja se realmente se garante.';
+      'Você não tem nenhum cadastro, para entrar você precisa se cadastrar.';
 
   String get nameFormHint => 'Nome';
   String get nameFormError => 'Nome é obrigatório';
@@ -33,7 +33,7 @@ class AppLocalizations {
   String get ageFormHint => 'Idade';
   String get ageFormError => 'Idade obrigatória';
 
-  String get registerPageBarTitle => 'Seja bem vindo';
+  String get registerPageBarTitle => 'TRZ';
   String get register => 'Cadastrar';
 
   ///
