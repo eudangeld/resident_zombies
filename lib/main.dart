@@ -4,7 +4,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:resident_zombies/model/app_state.dart';
 import 'package:resident_zombies/pages/main_game_page.dart';
-import 'package:resident_zombies/pages/profile_page.dart';
 import 'package:resident_zombies/pages/register_page.dart';
 import 'package:resident_zombies/theme/global_theme.dart';
 
@@ -55,14 +54,29 @@ class _AppState extends State<App> {
   /// check for data on device
   /// define initial route
   /// and set an initial user on state
+  /// in order to verify if server was reseted or user stored on device really exist on server
+  /// before sending to a main game route
+  /// i call the [getUser] and check response code
+  ///
   Future<bool> _defineInitialRoute() async {
     final _result = await checkStoredDataOnDevice();
+
     _result
         ? _initialRoute = MainGamePage.routeName
         : _initialRoute = RegisterPage.routeName;
 
     _state.user.add(await userFromStorage());
     _state.currentMapPosition.add(_state.user.value.lastLocation);
+    if (_initialRoute == MainGamePage.routeName) {
+      print('check user on server');
+      final _userResetedorDeleted =
+          await _api.getSurvivor(_state.user.value.id);
+      if (_userResetedorDeleted.statusCode > 200) {
+        print('this user has been deleted or server was reseted.');
+        _initialRoute = RegisterPage.routeName;
+      }
+    }
+
     return _result;
   }
 

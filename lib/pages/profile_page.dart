@@ -109,7 +109,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
           future: api(context).getSurvivor(routeArgs),
           builder: (BuildContext context, snapshot) {
             if (snapshot.hasData) {
-              _currentUser = User.fromJson(snapshot.data);
+              _currentUser = User.fromJson(snapshot.data.data);
 
               /// Determine currentPlayer profile or not
               _playerProfile = _currentUser.id == state(context).user.value.id;

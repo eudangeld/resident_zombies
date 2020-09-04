@@ -140,8 +140,6 @@ class Api {
           data: body,
           options: Options(contentType: Headers.formUrlEncodedContentType));
     } on DioError catch (error) {
-      print('Error reporting infection');
-      print(error.response.statusCode);
       _result = error.response;
     }
 
@@ -163,10 +161,10 @@ class Api {
   ///
   ///[GET]
   ///Use [person_id] to retrieve all itens information from
-  Future<dynamic> getSurvivorItems(String person_id) async {
+  Future<dynamic> getSurvivorItems(String personId) async {
     final dio = Dio();
     final _result = await dio.get(
-        'http://zssn-backend-example.herokuapp.com/api/people/$person_id/properties');
+        'http://zssn-backend-example.herokuapp.com/api/people/$personId/properties');
 
     return _result.data;
   }
@@ -176,10 +174,16 @@ class Api {
   /// Fetch a single survivor
   Future<dynamic> getSurvivor(String id) async {
     final dio = Dio();
-    final _result = await dio
-        .get("http://zssn-backend-example.herokuapp.com/api/people/$id");
-    print(_result.data);
-    return _result.data;
+    Response<dynamic> _response;
+
+    try {
+      _response = await dio
+          .get("http://zssn-backend-example.herokuapp.com/api/people/$id");
+    } on DioError catch (e) {
+      _response = e.response;
+    }
+
+    return _response;
   }
 
   ///[PATH]

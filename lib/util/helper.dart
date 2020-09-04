@@ -61,6 +61,15 @@ Future<bool> checkStoredDataOnDevice() async {
   return _hasKey;
 }
 
+/// Used to get string id on main
+/// when user have an previus registration
+/// can throw an error if u cant check before call
+Future<String> getIdFromDevice() async {
+  final prefs = await localStorage();
+
+  return prefs.getString('id');
+}
+
 /// Create an [User] on state
 ///
 /// Check for storagedata to create

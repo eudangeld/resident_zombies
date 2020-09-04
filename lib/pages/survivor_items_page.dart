@@ -39,7 +39,7 @@ class _SurvivorItemsPageState extends State<SurvivorItemsPage> {
           future: api(context).getSurvivorItems(routeArgs),
           builder: (BuildContext context, snapshot) {
             if (snapshot.hasData) {
-              List<dynamic> _data = snapshot.data as List<dynamic>;
+              List<dynamic> _data = snapshot.data.data as List<dynamic>;
 
               String _emptyMessage = _playerItens
                   ? 'Você está sem nenhum ítem, melhor você fazer alguma coisa antes que seja tarde!'
