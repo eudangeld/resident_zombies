@@ -80,10 +80,6 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
       final Response<dynamic> _response = await api(context)
           .reportInfection(state(context).user.value.id, _currentUser.id);
 
-      print(_response.statusCode);
-      print(_response.statusMessage);
-      print(_response.data);
-
       switch (_response.statusCode) {
         case 200:
           reportInfeteddAlertSuccess(context);
@@ -105,7 +101,7 @@ class _PlayerProfilePageState extends State<PlayerProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomSheet: BottomSheetButton(
-          label: lz(context).register, onPressed: _reportInfection),
+          label: 'Reportar infectado', onPressed: _reportInfection),
       appBar: AppBar(
         title: Text('Perfil'),
       ),
