@@ -124,8 +124,8 @@ class TradeDetailsPage extends StatelessWidget {
             List<dynamic> _data = snapshot.data as List<dynamic>;
 
             String _emptyMessage = _playerItens
-                ? 'Você está sem nenhum ítem, melhor você fazer alguma coisa antes que seja tarde!'
-                : 'Sobrevivente sem nenhum ítem, não vai durar muito tempo até ser infectado';
+                ? lz(context).noOneItens
+                : lz(context).survivorWithNoItensmessage;
 
             if (_data.isEmpty) {
               return Padding(

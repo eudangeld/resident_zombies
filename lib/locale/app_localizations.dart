@@ -63,6 +63,13 @@ class AppLocalizations {
   String get itensTitle => 'Ítens disponíveis';
   String get intensSubtitle =>
       'Você pode trocar ítens com outros jogadores, coloque os ítens no carrinho, selecione os ítens que você vai usar na troca e seja feliz. \nPS: Não aceitamos trocas ou parcelamentos. ';
+
+  //// Trade itens sequency
+  ///S
+  String get noOneItens =>
+      'Você está sem nenhum ítem, melhor você fazer alguma coisa antes que seja tarde!';
+  String get survivorWithNoItensmessage =>
+      'Sobrevivente sem nenhum ítem, não vai durar muito tempo até ser infectado';
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
