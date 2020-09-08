@@ -13,23 +13,8 @@ class Api {
 
   /// Trade an item
   ///
-  /// [personId] Survivor UUID
-  /// [consumerName] Recipient of the transaction full name
-  /// [consumerPick] The list of items and quantities WANTED, in the format 'Fiji Water:10;Campbell Soup:5'
-  /// [consumerPayment] The list of items and quantities to PAY IN RETURN, in the format 'Fiji Water:5;Campbell Soup:10'
   Future<dynamic> tradeItem(Tradeoptions options) async {
-    final dio = Dio();
-    Response _response;
-
-    try {
-      final _result = _response = await dio.post(
-          'http://zssn-backend-example.herokuapp.com/api/people/${options.survivorUUID}/properties/trade_item',
-          data: options.prepare());
-    } on DioError catch (error) {
-      _response = error.response;
-    }
-
-    return _response;
+    return options.call();
   }
 
   ///Returns a list of items belonging to a Person

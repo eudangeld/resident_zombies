@@ -9,6 +9,11 @@ import 'package:resident_zombies/widgets/trade_itens_quantity.dart';
 ///
 /// All needed params used to trade itens
 /// will be here
+///
+/// [personId] Survivor UUID
+/// [consumerName] Recipient of the transaction full name
+/// [consumerPick] The list of items and quantities WANTED, in the format 'Fiji Water:10;Campbell Soup:5'
+/// [consumerPayment] The list of items and quantities to PAY IN RETURN, in the format 'Fiji Water:5;Campbell Soup:10'
 class Tradeoptions extends AppRequest {
   /// Itens that user WANT after current trade
   ///
@@ -85,8 +90,21 @@ class Tradeoptions extends AppRequest {
   }
 
   @override
-  Future<Response> call() {
-    // TODO: implement call
-    throw UnimplementedError();
+  Future<Response> call() async {
+    final dio = Dio();
+    Response _response;
+    final _body = prepare();
+
+    /// URI for service
+    final _apiUri =
+        'http://zssn-backend-example.herokuapp.com/api/people/${survivorUUID}/properties/trade_item';
+
+    try {
+      _response = _response = await dio.post(_apiUri, data: _body);
+    } on DioError catch (error) {
+      _response = error.response;
+    }
+
+    return _response;
   }
 }
