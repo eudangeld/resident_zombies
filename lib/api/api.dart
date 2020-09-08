@@ -24,7 +24,7 @@ class Api {
     try {
       final _result = _response = await dio.post(
           'http://zssn-backend-example.herokuapp.com/api/people/${options.survivorUUID}/properties/trade_item',
-          data: options.prepareToApi());
+          data: options.prepare());
     } on DioError catch (error) {
       _response = error.response;
     }
