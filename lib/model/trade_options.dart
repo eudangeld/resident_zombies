@@ -17,6 +17,32 @@ class Tradeoptions {
   ///Target user [survivorUUID]
   final String survivorUUID;
 
+  Map<dynamic, dynamic> prepareToApi() {
+    assert(sendingItens != null);
+    assert(wantedItens != null);
+    assert(survivorUUID != null);
+    assert(player != null);
+    assert(sendingItens.isNotEmpty);
+    assert(wantedItens.isNotEmpty);
+
+    return {
+      'person_id': survivorUUID,
+      'consumer': {
+        'name': player.name,
+        'pick': sendingItens
+            .map((e) => e.currentItem)
+            .toList()
+            .map((e) => e.name + ':' + e.units.toString())
+            .join(';'),
+        'payment': sendingItens
+            .map((e) => e.currentItem)
+            .toList()
+            .map((e) => e.name + ':' + e.units.toString())
+            .join(';'),
+      }
+    };
+  }
+
   ///Player [User]
   ///its just to avoid verbosity when call state(context)....
   ///

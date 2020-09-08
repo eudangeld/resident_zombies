@@ -18,34 +18,13 @@ class Api {
   /// [consumerPick] The list of items and quantities WANTED, in the format 'Fiji Water:10;Campbell Soup:5'
   /// [consumerPayment] The list of items and quantities to PAY IN RETURN, in the format 'Fiji Water:5;Campbell Soup:10'
   Future<dynamic> tradeItem(Tradeoptions options) async {
-    final sendingQuery = options.sendingItens
-        .map((e) => e.currentItem)
-        .toList()
-        .map((e) => e.name + ':' + e.units.toString())
-        .join(';');
-
-    final receiveQuery = options.wantedItens
-        .map((e) => e.currentItem)
-        .toList()
-        .map((e) => e.name + ':' + e.units.toString())
-        .join(';');
-
-    Map<dynamic, dynamic> body = {
-      'person_id': options.survivorUUID,
-      'consumer': {
-        'name': options.player.name,
-        'pick': receiveQuery,
-        'payment': sendingQuery,
-      }
-    };
-
     final dio = Dio();
     Response _response;
 
     try {
       final _result = _response = await dio.post(
           'http://zssn-backend-example.herokuapp.com/api/people/${options.survivorUUID}/properties/trade_item',
-          data: body);
+          data: options.prepareToApi());
     } on DioError catch (error) {
       _response = error.response;
     }
