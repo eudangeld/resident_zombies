@@ -24,6 +24,19 @@ class User {
     this.lastLocation,
   });
 
+  Map<String, dynamic> toJson(User user) {
+    return {
+      "name": name,
+      "id": id ?? '',
+      "age": age,
+      "gender": gender,
+      "lastLocation": lastLocation,
+      "infected": infected,
+      "createdAt": createdAt ?? '',
+      "updatedAt": updatedAt ?? '',
+    };
+  }
+
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json['id'] ?? getIdFromLocation(json['location']),
