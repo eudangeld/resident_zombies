@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -9,6 +7,7 @@ import 'package:resident_zombies/util/alerts.dart';
 import 'package:resident_zombies/util/helper.dart';
 import 'package:resident_zombies/widgets/button.dart';
 import 'package:resident_zombies/widgets/loading_widget.dart';
+import 'package:resident_zombies/widgets/social_login_buttons.dart';
 
 class RegisterPage extends StatefulWidget {
   static String get routeName => '@routes/register_page';
@@ -205,6 +204,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                           ),
                         ),
+                        SocialLoginButtons(),
                         Padding(
                           padding: EdgeInsets.all(30),
                           child: Button(

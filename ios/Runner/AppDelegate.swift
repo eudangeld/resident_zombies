@@ -1,6 +1,8 @@
 import UIKit
 import Flutter
 import GoogleMaps
+import UIKit 
+import FBSDKCoreKit
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
   override func application(
@@ -12,3 +14,7 @@ import GoogleMaps
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }
+
+
+
+
