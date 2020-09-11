@@ -166,6 +166,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               EdgeInsets.only(top: 70, left: 20, right: 20),
                           child: Container(
                               child: Text('The Resident Zombie',
+                                  key: Key('title-page-key'),
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black,
