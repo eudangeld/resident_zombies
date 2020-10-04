@@ -12,6 +12,7 @@ class HealthBar extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           print(snapshot.data);
+
           return Padding(
               padding: EdgeInsets.all(15.0),
               child: Column(
